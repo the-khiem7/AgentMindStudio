@@ -1,11 +1,11 @@
 # AgentMindStudio — Proposed Technical Baseline
 
 **Baseline date:** 2026-07-15  
-**Implemented state:** None. The repository was indexed on this date and contained only the project root. Everything below is proposed, not implemented.
+**Application implemented state:** None. The repository contains Nexus, baseline, and spike evidence, including the passed TG-001 ElectroBun foundation prototype, but no production application source. Everything below remains proposed rather than implemented.
 
 **Authority:** This technical baseline inherits product intent from the [Project Nexus](../../nexus/README.md).
 
-**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). Components below are proposed until their required gate passes and code/tests exist.
+**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). TG-001 permits the ElectroBun scaffold and Windows platform-port commitment with its documented limitations; every component below remains proposed until its own required gates pass and production code/tests exist.
 
 ## 1. Architecture objective
 

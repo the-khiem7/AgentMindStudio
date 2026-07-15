@@ -55,6 +55,8 @@ Only path existence was inspected; no configuration content or credentials were 
 
 This supports local discovery feasibility, but does not prove that each path contains valid or active configuration.
 
+TG-001 also produced local runtime evidence on 2026-07-15: ElectroBun 1.18.1 with Bun 1.3.13 and SQLite 3.51.2 passed the required Windows filesystem, process, SQLite, stable packaging, and non-elevated packaged-runtime checks. See the [spike report](../../spikes/electrobun-foundation/2026-07-15-electrobun-1.18.1-windows.md) and [machine-readable result](../../spikes/electrobun-foundation/runs/20260715-174500/results.json). This evidence does not cover signing, installer execution, or production update delivery.
+
 ## 3. Verified external facts
 
 The facts below were checked against official product documentation on 2026-07-15. They are evidence for the initial adapter model, not permanent guarantees.
@@ -141,7 +143,7 @@ Options:
 | A-005 | The pinned skills CLI remains usable behind guarded semantic checks despite incomplete structured output. | Repeat the project-scoped isolated spike for every candidate version and wrapper change. | Freeze upgrades or replace the backend. |
 | A-006 | Client versions can be detected reliably. | Compare executable, extension, package, and config markers. | Compatibility status becomes misleading. |
 | A-007 | Secret fields can be identified without resolving their values. | TG-004 sanitized fixture tests plus TG-006 threat-model security cases. | Export or diagnostics may leak secrets. |
-| A-008 | ElectroBun supports the required filesystem, process, SQLite, packaging, signing, and update flows on Windows. | TG-001 packaged foundation spike. | Framework change or native helper required. |
+| A-008 | ElectroBun signing, installer execution, and production update delivery meet release requirements on Windows. | Signed release-candidate installation, update, rollback, and recovery tests in Phase 7. | Release packaging, signing, or update architecture must change. |
 
 ## 7. Rejected assumptions
 

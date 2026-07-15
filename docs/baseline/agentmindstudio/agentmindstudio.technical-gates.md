@@ -32,7 +32,7 @@ Gate update protocol:
 
 | Gate | Technical question | Status | Owner | Blocks | Dependencies | Evidence |
 |---|---|---|---|---|---|---|
-| TG-001 | Can ElectroBun safely provide the required Windows filesystem, process, SQLite, and packaging primitives? | `planned` | Unassigned | Production scaffold and platform-port commitment | None | Planned: `docs/spikes/electrobun-foundation/` |
+| TG-001 | Can ElectroBun safely provide the required Windows filesystem, process, SQLite, and packaging primitives? | `passed` | Codex | Production scaffold and platform-port commitment | None | [Spike](../../spikes/electrobun-foundation/2026-07-15-electrobun-1.18.1-windows.md), [passing report](../../spikes/electrobun-foundation/runs/20260715-174500/results.json) |
 | TG-002 | Is the adapter and capability contract precise enough for independent client adapters? | `planned` | Unassigned | Client-specific read/write adapter implementation | Nexus domain model | Planned: `docs/adr/ADR-0001-adapter-capability-contract.md` |
 | TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `planned` | Unassigned | Discovery rules and fixture completion | None | Planned: `docs/spikes/client-surface-config/` and updated surface matrix |
 | TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `planned` | Unassigned | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | Planned: `fixtures/clients/` |
@@ -46,7 +46,7 @@ Gate update protocol:
 | Boundary | Readiness | Required gates |
 |---|---|---|
 | Start technical spikes and ADR work | `ready` | Product decisions are closed. |
-| Commit to the ElectroBun production scaffold | `not ready` | TG-001 |
+| Commit to the ElectroBun production scaffold | `ready` | TG-001 passed with documented packaging/lifecycle limitations. |
 | Implement client-specific read adapters | `not ready` | TG-002, TG-003, TG-004 |
 | Persist normalized inventory in SQLite | `not ready` | TG-005 |
 | Implement production Dashboard/Coverage/Diff flows | `not ready` | TG-007 plus the relevant read services |
@@ -86,7 +86,7 @@ flowchart TD
 
 ### Execution waves
 
-1. **Wave 0 — Parallel evidence:** start TG-001, TG-002, TG-003, and TG-007. None of these requires product implementation writes.
+1. **Wave 0 — Parallel evidence:** execute TG-001, TG-002, TG-003, and TG-007 according to the dashboard's current status. Do not rerun a passed gate unless an invalidation trigger occurs; none of these gates requires product implementation writes.
 2. **Wave 1 — Read-only foundation:** after TG-001, create the scaffold and platform ports. Complete TG-004 and TG-005, then implement discovery/read adapters, persistent inventory, and the approved shadcn/ui read flows.
 3. **Wave 2 — Mutation safety:** complete TG-006 and the read-only vertical slice, then implement snapshots, fingerprints, transaction state, atomic writes, verification, and recovery.
 4. **Wave 3 — Writable capabilities:** implement MCP/skill write adapters and reviewed synchronization. Implement mutating skills workflows only with TG-008 plus Phase 2 safeguards.
@@ -259,6 +259,20 @@ Current evidence:
 Pass condition: exact version, command discovery, JSON inventory, local discovery, isolated install/use/remove, timeout handling, and known non-zero/zero-exit anomalies match the guarded contract.
 
 Invalidation: package pin, invocation method, expected output shape, supported command set, Node/npm runtime, or gateway contract changes.
+
+### TG-001 completion — 2026-07-15
+
+Gate: TG-001  
+Previous state: `planned`  
+New state: `passed`  
+Reviewed at: 2026-07-15 17:07 Asia/Saigon  
+Owner: Codex  
+Environment/versions: Windows 11 Pro 10.0.22631 build 22631 AMD64; ElectroBun 1.18.1; Bun 1.3.13; SQLite 3.51.2  
+Artifacts: [`docs/spikes/electrobun-foundation/`](../../spikes/electrobun-foundation/)  
+Verification evidence: [Spike report](../../spikes/electrobun-foundation/2026-07-15-electrobun-1.18.1-windows.md) and [passing machine report](../../spikes/electrobun-foundation/runs/20260715-174500/results.json)  
+Limitations: stable packaging requires a process-local execution-policy workaround for `Compress-Archive`; the headless packaged launcher required runner termination after the probe completed; installer execution/signing and UI lifecycle were outside scope.  
+Invalidation triggers confirmed: ElectroBun/Bun major upgrade, packaging/runtime replacement, newly required native primitive, or changed release-build policy/module environment.  
+Affected roadmap/sourcecode sections: roadmap first action now proceeds to TG-002; the technical baseline now records TG-001 evidence while keeping all production components proposed.
 
 ## 6. Gate completion record template
 

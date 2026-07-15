@@ -235,11 +235,8 @@ Exit criteria:
 
 ## First next action
 
-Start Wave 0 from the [technical-gate register](agentmindstudio.technical-gates.md):
+Assign an owner and start TG-002 by drafting `docs/adr/ADR-0001-adapter-capability-contract.md` against the Nexus domain model and the TG-002 pass conditions in the [technical-gate register](agentmindstudio.technical-gates.md).
 
-1. Assign an owner and start TG-001, the ElectroBun foundation spike.
-2. In parallel, start TG-002 for the adapter/capability ADR and TG-003 for surface source/precedence evidence.
-3. TG-007 UI exploration may run in parallel because it does not authorize production UI implementation.
-4. Start TG-004 fixture completion only after TG-002 defines expected normalized contracts and TG-003 verifies source rules.
+TG-003 source/precedence evidence and TG-007 UI exploration may proceed independently in the same Wave 0. Start TG-004 fixture completion only after TG-002 defines expected normalized contracts and TG-003 verifies source rules.
 
 The Phase 0 adapter proof may demonstrate discovery, normalization, comparison, and a side-effect-free dry-run. It must not implement real snapshot/write/rollback behavior; those capabilities begin only after TG-006 and the Phase 1 read-only exit permit entry into Phase 2.

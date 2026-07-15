@@ -1,0 +1,16 @@
+{
+	"name": "agentmindstudio-tg001-probe",
+	"private": true,
+	"version": "0.0.0",
+	"scripts": {
+		"probe:source": "bun src/bun/index.ts",
+		"build:probe": "electrobun build --env=dev",
+		"package:probe": "electrobun build --env=stable"
+	},
+	"dependencies": {
+		"electrobun": "1.18.1"
+	},
+	"devDependencies": {
+		"@types/bun": "1.3.8"
+	}
+}
