@@ -33,7 +33,7 @@ Gate update protocol:
 | Gate | Technical question | Status | Owner | Blocks | Dependencies | Evidence |
 |---|---|---|---|---|---|---|
 | TG-001 | Can ElectroBun safely provide the required Windows filesystem, process, SQLite, and packaging primitives? | `passed` | Codex | Production scaffold and platform-port commitment | None | [Spike](../../spikes/electrobun-foundation/2026-07-15-electrobun-1.18.1-windows.md), [passing report](../../spikes/electrobun-foundation/runs/20260715-174500/results.json) |
-| TG-002 | Is the adapter and capability contract precise enough for independent client adapters? | `planned` | Unassigned | Client-specific read/write adapter implementation | Nexus domain model | Planned: `docs/adr/ADR-0001-adapter-capability-contract.md` |
+| TG-002 | Is the adapter and capability contract precise enough for independent client adapters? | `passed` | Codex | Client-specific read/write adapter implementation | Nexus domain model | [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md), [contract proof](../../spikes/adapter-contract/README.md), [passing report](../../spikes/adapter-contract/runs/20260716-011900/results.json) |
 | TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `planned` | Unassigned | Discovery rules and fixture completion | None | Planned: `docs/spikes/client-surface-config/` and updated surface matrix |
 | TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `planned` | Unassigned | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | Planned: `fixtures/clients/` |
 | TG-005 | Does the first SQLite schema represent identities, bindings, observations, plans, audit, and recovery without storing secrets? | `planned` | Unassigned | Persistence-backed inventory and operation journal | TG-002; scaffold from TG-001 | Planned: `docs/adr/ADR-0002-sqlite-metadata-schema.md` and migration `0001` |
@@ -47,7 +47,7 @@ Gate update protocol:
 |---|---|---|
 | Start technical spikes and ADR work | `ready` | Product decisions are closed. |
 | Commit to the ElectroBun production scaffold | `ready` | TG-001 passed with documented packaging/lifecycle limitations. |
-| Implement client-specific read adapters | `not ready` | TG-002, TG-003, TG-004 |
+| Implement client-specific read adapters | `not ready` | TG-003 and TG-004; TG-002 is passed. |
 | Persist normalized inventory in SQLite | `not ready` | TG-005 |
 | Implement production Dashboard/Coverage/Diff flows | `not ready` | TG-007 plus the relevant read services |
 | Enter Phase 2 mutation engine | `not ready` | Read-only foundation exit plus TG-006 |
@@ -273,6 +273,20 @@ Verification evidence: [Spike report](../../spikes/electrobun-foundation/2026-07
 Limitations: stable packaging requires a process-local execution-policy workaround for `Compress-Archive`; the headless packaged launcher required runner termination after the probe completed; installer execution/signing and UI lifecycle were outside scope.  
 Invalidation triggers confirmed: ElectroBun/Bun major upgrade, packaging/runtime replacement, newly required native primitive, or changed release-build policy/module environment.  
 Affected roadmap/sourcecode sections: roadmap first action now proceeds to TG-002; the technical baseline now records TG-001 evidence while keeping all production components proposed.
+
+### TG-002 completion — 2026-07-16
+
+Gate: TG-002  
+Previous state: `planned`  
+New state: `passed`  
+Reviewed at: 2026-07-16 01:18 Asia/Saigon  
+Owner: Codex  
+Environment/versions: Windows NT 10.0.22631 AMD64; Node.js 24.13.1; TypeScript 6.0.2; adapter contract 1.0.0  
+Artifacts: [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md) and [`docs/spikes/adapter-contract/`](../../spikes/adapter-contract/)  
+Verification evidence: [Passing strict-compile and contract-proof report](../../spikes/adapter-contract/runs/20260716-011900/results.json)  
+Limitations: proof adapters use synthetic, secret-free native shapes; they establish the interface and capability invariants but do not verify production client paths, precedence, parser round trips, or write preservation, which remain TG-003/TG-004 work. TypeScript cannot prevent ambient side effects, so adapter purity remains a review and deterministic-test invariant.  
+Invalidation triggers confirmed: reopen when an MVP artifact or surface cannot be represented without breaking contract 1.0.0.  
+Affected roadmap/sourcecode sections: roadmap first action proceeds to TG-003; the technical baseline now references the accepted contract and keeps all production adapters proposed.
 
 ## 6. Gate completion record template
 

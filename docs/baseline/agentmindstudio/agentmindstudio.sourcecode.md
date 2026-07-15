@@ -135,32 +135,33 @@ SQLite is not a CRUD mirror of client configuration. Live client files remain au
 - **Relationship data** records aliases, provenance, bindings, intentional differences, and shared-content references that cannot be reconstructed reliably from current file bytes alone.
 - **Operation state** records planned, snapshotted, applying, verified, restored, and failed transitions so a crash can be diagnosed and recovered.
 
-## 3. Proposed adapter contract
+## 3. Approved adapter contract
 
-This section is design input to TG-002, not an approved implementation contract. TG-002 must produce the ADR, versioned TypeScript interface, capability schema, and proof adapters before client-specific adapter implementation begins.
+TG-002 accepted [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md) and contract version `1.0.0` in [`docs/spikes/adapter-contract/`](../../spikes/adapter-contract/). The contract compiles with Codex and Kilo proof adapters through one condition-free registry. Client-specific production adapters remain proposed until TG-003 source evidence and TG-004 fixtures pass.
 
-An adapter should provide behavior equivalent to:
+An adapter provides behavior equivalent to:
 
 ```text
-identity(): ClientDescriptor
-detect(context): ClientInstallation[]
-discoverLayers(installation): ConfigLayer[]
-capabilities(version): CapabilityMatrix
-readLayer(layer): ParsedLayer
+descriptor: AdapterDescriptor
+capabilities(): CapabilityMatrix
+discover(snapshot): ConfigSource[]
+read(sourceDocument): ParsedSource
 normalize(parsedLayer): Artifact[]
 compare(logicalAsset, target): CompatibilityResult
 planWrite(logicalAsset, target, choices): PlannedChange[]
 render(plannedChanges, originalBytes): RenderedOutput
 validate(renderedOutput, target): ValidationResult
-postWriteCheck(target): VerificationResult
+postWriteCheck(expected, observed): VerificationResult
 reloadGuidance(target): ReloadInstruction
 ```
 
 Required guarantees:
 
-- `readLayer`, `normalize`, `compare`, and `planWrite` are side-effect free.
+- `discover`, `read`, `normalize`, `compare`, and `planWrite` are side-effect free; core supplies immutable environment/source observations.
 - `render` preserves unknown fields and source formatting when the parser supports it.
-- Every write capability is explicit by artifact type, scope, and client version.
+- Every write capability is explicit by surface, artifact type, user/global scope, schema evidence, and verified client version.
+- Adapters return candidate bytes and verification results; the core transaction service owns snapshots, external-change rechecks, filesystem writes, audit, and recovery.
+- Instruction capability rows are read-only in MVP and cannot declare mutation operations.
 - Adapter errors are structured; raw secret-bearing source is not included in generic logs.
 
 ## 4. Proposed normalized model

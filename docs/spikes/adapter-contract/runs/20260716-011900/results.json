@@ -1,0 +1,38 @@
+{
+  "status": "pass",
+  "timestamp": "2026-07-15T18:19:39.8316228+00:00",
+  "environment": {
+    "windows": "Microsoft Windows NT 10.0.22631.0",
+    "architecture": "AMD64",
+    "node": "v24.13.1",
+    "typescript": "Version 6.0.2"
+  },
+  "compile": {
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "proof": {
+    "status": "pass",
+    "contractVersion": "1.0.0",
+    "adapters": [
+      "proof.codex",
+      "proof.kilo"
+    ],
+    "checks": {
+      "sharedContractRegistry": true,
+      "capabilitySchema": true,
+      "sharedSourceSurfaces": true,
+      "deterministicPureMethods": true,
+      "explicitWriteEvidence": true,
+      "instructionReadOnly": true,
+      "conditionFreeCoreLoop": true,
+      "safeErrors": true
+    }
+  },
+  "limitations": [
+    "Proof adapters use synthetic pre-parsed shapes and do not pass TG-003 source verification.",
+    "Proof preservation claims are contract-validation fixtures, not production TG-004 round-trip evidence.",
+    "TypeScript cannot prevent ambient side effects; purity remains a review and test invariant."
+  ]
+}

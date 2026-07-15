@@ -235,8 +235,8 @@ Exit criteria:
 
 ## First next action
 
-Assign an owner and start TG-002 by drafting `docs/adr/ADR-0001-adapter-capability-contract.md` against the Nexus domain model and the TG-002 pass conditions in the [technical-gate register](agentmindstudio.technical-gates.md).
+Assign an owner and start TG-003 by producing one source/precedence evidence record per MVP surface under `docs/spikes/client-surface-config/`, then update the Nexus client-surface matrix from that evidence. Use the accepted [ADR-0001 adapter contract](../../adr/ADR-0001-adapter-capability-contract.md) and its capability vocabulary; do not treat the TG-002 proof paths or synthetic preservation claims as TG-003/TG-004 production evidence.
 
-TG-003 source/precedence evidence and TG-007 UI exploration may proceed independently in the same Wave 0. Start TG-004 fixture completion only after TG-002 defines expected normalized contracts and TG-003 verifies source rules.
+TG-007 UI exploration may proceed independently in the same Wave 0. TG-002 now permits contract-shaped fixture design, but complete TG-004 capability claims only after TG-003 verifies source rules and each sanitized fixture proves the relevant parser/preservation behavior.
 
 The Phase 0 adapter proof may demonstrate discovery, normalization, comparison, and a side-effect-free dry-run. It must not implement real snapshot/write/rollback behavior; those capabilities begin only after TG-006 and the Phase 1 read-only exit permit entry into Phase 2.
