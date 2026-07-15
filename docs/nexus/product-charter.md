@@ -24,8 +24,11 @@ The user can answer three questions before any write:
 - Windows-first desktop app, with operating-system paths and process behavior behind portable interfaces.
 - Global/user configuration only; no drive-wide project discovery.
 - Harness scope: GitHub Copilot, Codex, Kiro, and Kilo Code.
+- Copilot scope includes both CLI and VS Code as distinct surfaces, limited to user/global configuration sources.
 - Read, compare, visualize, and manually apply reviewed changes.
+- Instruction/rule support is read-only in MVP: inventory, coverage, precedence, activation semantics, and diff only.
 - Structured UI is primary; Raw Config is an advanced escape hatch.
+- Google Stitch is used for UI exploration; production UI is implemented with owned shadcn/ui-based components.
 - skills CLI capabilities are exposed through a pinned and guarded process gateway.
 
 ## Explicit non-goals for MVP

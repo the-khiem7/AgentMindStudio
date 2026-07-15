@@ -17,14 +17,13 @@
 | ND-011 | Unknown config versions use a schema/capability gate. | Read is allowed where possible; unsafe or lossy writes are blocked, with advanced Raw Config remaining guarded. |
 | ND-012 | Private MVP uses a portable/manual Windows build. | Signing and auto-update are deferred until public distribution. |
 | ND-013 | Greenfield product truth starts in the Nexus; baseline packs inherit it. | Baselines track execution without redefining product invariants. |
+| NOD-001 (closed) | Support both Copilot CLI and Copilot VS Code in the writable MVP as distinct surfaces. | Each surface has separate sources, capabilities, fixtures, and bindings; AMS still manages user/global sources only. |
+| NOD-002 (closed) | Use Google Stitch for design exploration and shadcn/ui for production implementation. | Stitch output is a prototype input; the maintained UI source lives in owned shadcn/ui-based components. |
+| NOD-003 (closed) | Instruction/rule support is read-only in MVP. | AMS inventories, classifies, compares, and shows coverage for instructions but does not create, edit, sync, remove, or raw-write instruction sources. |
 
 ## Open decisions
 
-| ID | Question | Current recommendation |
-|---|---|---|
-| NOD-001 | Which Copilot surface is in the first writable MVP: CLI, VS Code, or both? | Implement distinct surface capabilities; choose one first rather than pretending their config source is shared. |
-| NOD-002 | Which UI workflow becomes the production design source? | Explore with Google Stitch, implement with shadcn/ui, and customize the diff/coverage experience. |
-| NOD-003 | Which instruction/rule families are first-class in the first vertical slice? | Start with the four harnesses' global instruction roots proven by sanitized fixtures. |
+No Nexus-level decisions from the current business-analysis set remain open. New unknowns must be added here before an implementation silently chooses a direction.
 
 ## Decision process
 

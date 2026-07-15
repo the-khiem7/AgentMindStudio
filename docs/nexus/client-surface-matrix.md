@@ -9,7 +9,7 @@ Different surfaces sometimes share a global config source, but this is not a uni
 | Codex | App, CLI, and IDE extension share `~/.codex/config.toml` for MCP configuration on the same host. | Yes for this MCP source. | One resolved source with several consuming surfaces. |
 | Kiro | IDE and CLI document `~/.kiro/settings/mcp.json` as the global MCP file; workspace configuration is separate. | Yes for global MCP, not proof that every capability uses one root. | Reuse the global MCP source; retain surface capability flags. |
 | Kilo Code | CLI, VS Code, and JetBrains read the same JSONC configuration according to Kilo settings documentation. | Yes for the documented core configuration. | Parse once per resolved path and expose consuming surfaces. |
-| GitHub Copilot | Copilot CLI uses `~/.copilot/mcp-config.json`; Copilot CLI documentation treats VS Code `.vscode/mcp.json` as a different format/location to migrate. | No universal shared source across CLI and VS Code. | Exact Copilot MVP surface must be selected; do not merge them into one adapter silently. |
+| GitHub Copilot | Copilot CLI uses `~/.copilot/mcp-config.json`; Copilot CLI documentation treats VS Code MCP configuration as a different format/location to migrate. | No universal shared source across CLI and VS Code. | Support both as distinct MVP surfaces with separate capabilities and bindings; manage only their user/global sources. |
 
 ## Source references
 

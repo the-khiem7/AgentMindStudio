@@ -47,6 +47,8 @@ Classifications:
 
 Instructions follow the same provenance/content approach, with target path and precedence layer included in the binding.
 
+Instruction bindings are read-only in MVP. Identity and drift relations exist for inventory, coverage, and comparison, but mutation operations are not enabled for instruction sources.
+
 ## Drift is descriptive, not corrective
 
 Drift types include `MissingBinding`, `StructuralDifference`, `VersionDrift`, `NameCollision`, `AliasDifference`, `CredentialBindingDifference`, and `UnsupportedField`.
@@ -74,7 +76,7 @@ Color is never the only signal.
 | `UpdateBinding` | Change selected portable or target-specific fields | Replace target credentials unless explicitly selected |
 | `DisableBinding` | Preserve definition/content but mark it inactive where supported | Delete the asset |
 | `RemoveBinding` | Remove one client/surface reference | Delete shared physical content still referenced elsewhere |
-| `UninstallContent` | Delete installed skill/instruction bytes after proving no retained binding needs them | Fan out to every client implicitly |
+| `UninstallContent` | Delete mutable installed content, such as a skill, after proving no retained binding needs it | Fan out to every client implicitly |
 | `RemoveEverywhere` | Explicit multi-target plan composed of binding removals and optional content deletion | Run without target enumeration and confirmation |
 | `RestoreSnapshot` | Restore bytes from a known operation snapshot and verify parsing | Erase the audit record being restored from |
 

@@ -29,6 +29,6 @@ The write pipeline is: discover -> parse -> plan -> semantic diff -> confirm -> 
 
 ## UI delivery direction
 
-Use design-generation tools such as Google Stitch for fast exploration and variants, then implement the accepted product UI with owned components. For this product, shadcn/ui is the leading implementation candidate because its source-owned components are easier to customize for dense diff and coverage workflows. Chakra UI remains viable if abstraction and speed matter more than fine-grained visual control.
+Use Google Stitch for fast exploration, information-architecture experiments, and visual variants. Treat its output as prototype input rather than maintained production source.
 
-This recommendation is not yet a closed decision.
+Implement the accepted production UI with owned shadcn/ui-based components. This keeps dense diff, coverage, conflict, and operation-review interfaces customizable and inspectable in the application source.

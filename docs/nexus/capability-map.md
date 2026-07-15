@@ -5,11 +5,12 @@
 | Capability | User value | Minimum safe behavior |
 |---|---|---|
 | Client discovery | Know which supported harnesses and surfaces exist | Read-only path resolution and health status |
-| Unified inventory | See MCP, skills, instructions, and layers together | Provenance, resolved path, support level, no writes |
+| Unified inventory | See MCP, skills, instructions, and layers together | Provenance, resolved path, support level; instruction sources are read-only |
 | Coverage and drift | See what Copilot lacks compared with Kiro or Kilo | Semantic classifications, intentional overrides, diff UI |
-| Manual synchronization | Copy or adapt one selected asset | Capability gate, preview, snapshot, explicit confirmation |
+| Manual synchronization | Copy or adapt one selected MCP or skill | Capability gate, preview, snapshot, explicit confirmation; instructions excluded in MVP |
 | MCP management | Add, update, disable, remove, and link aliases | Preserve per-client credential bindings |
 | Skill command center | Use skills workflows without terminal syntax | Pinned runner, isolated staging, guarded parsing, clear errors |
+| Instruction intelligence | Understand global instructions across clients | Read-only inventory, activation/precedence classification, coverage, and semantic diff |
 | Raw Config | Handle unsupported edge cases | Parse validation, semantic/line diff, same transaction pipeline |
 | Recovery and audit | Explain and reverse AMS changes | SQLite operation journal plus filesystem snapshot bytes |
 
@@ -32,6 +33,7 @@ SQLite is not a secret vault. Store redacted fingerprints or references to crede
 ## Deferred capabilities
 
 - Automatic synchronization between selected clients.
+- Instruction create, edit, sync, remove, conversion, and Raw Config writes.
 - Project-scope discovery and management.
 - Named portable profiles and encrypted export bundles.
 - Additional harness adapters.
