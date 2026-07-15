@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spike skills CLI"
+  short_description: "Verify a pinned skills CLI contract safely"
+  default_prompt: "Use $spike-skills-cli to rerun the isolated skills CLI compatibility spike."
