@@ -34,8 +34,8 @@ Gate update protocol:
 |---|---|---|---|---|---|---|
 | TG-001 | Can ElectroBun safely provide the required Windows filesystem, process, SQLite, and packaging primitives? | `passed` | Codex | Production scaffold and platform-port commitment | None | [Spike](../../spikes/electrobun-foundation/2026-07-15-electrobun-1.18.1-windows.md), [passing report](../../spikes/electrobun-foundation/runs/20260715-174500/results.json) |
 | TG-002 | Is the adapter and capability contract precise enough for independent client adapters? | `passed` | Codex | Client-specific read/write adapter implementation | Nexus domain model | [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md), [contract proof](../../spikes/adapter-contract/README.md), [passing report](../../spikes/adapter-contract/runs/20260716-011900/results.json) |
-| TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `planned` | Unassigned | Discovery rules and fixture completion | None | Planned: `docs/spikes/client-surface-config/` and updated surface matrix |
-| TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `planned` | Unassigned | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | Planned: `fixtures/clients/` |
+| TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `in_progress` | Codex | Discovery rules and fixture completion | None | [Evidence pack](../../spikes/client-surface-config/README.md), [surface-artifact matrix](../../spikes/client-surface-config/surface-artifact-matrix.json), [sanitized local report](../../spikes/client-surface-config/runs/20260716-ams-windows/results.json) |
+| TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `planned` | Codex | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | Planned: `fixtures/clients/` |
 | TG-005 | Does the first SQLite schema represent identities, bindings, observations, plans, audit, and recovery without storing secrets? | `planned` | Unassigned | Persistence-backed inventory and operation journal | TG-002; scaffold from TG-001 | Planned: `docs/adr/ADR-0002-sqlite-metadata-schema.md` and migration `0001` |
 | TG-006 | Are filesystem, package, process, MCP, symlink, snapshot, log, and export threats understood and mitigated? | `planned` | Unassigned | Phase 2 mutation and every mutating skills workflow | TG-001, TG-002, TG-005 | Planned: `agentmindstudio.threat-model.md` |
 | TG-007 | Are navigation, Coverage, Diff, Apply, error, and read-only Instruction flows approved before production UI work? | `planned` | Unassigned | Production implementation of the corresponding UI flows | Closed product decisions | Planned: `docs/spikes/ui-exploration/` |
@@ -47,7 +47,7 @@ Gate update protocol:
 |---|---|---|
 | Start technical spikes and ADR work | `ready` | Product decisions are closed. |
 | Commit to the ElectroBun production scaffold | `ready` | TG-001 passed with documented packaging/lifecycle limitations. |
-| Implement client-specific read adapters | `not ready` | TG-003 and TG-004; TG-002 is passed. |
+| Implement client-specific read adapters | `not ready` | TG-003 and TG-004 remain under review; TG-002 is passed. |
 | Persist normalized inventory in SQLite | `not ready` | TG-005 |
 | Implement production Dashboard/Coverage/Diff flows | `not ready` | TG-007 plus the relevant read services |
 | Enter Phase 2 mutation engine | `not ready` | Read-only foundation exit plus TG-006 |
@@ -86,8 +86,8 @@ flowchart TD
 
 ### Execution waves
 
-1. **Wave 0 — Parallel evidence:** execute TG-001, TG-002, TG-003, and TG-007 according to the dashboard's current status. Do not rerun a passed gate unless an invalidation trigger occurs; none of these gates requires product implementation writes.
-2. **Wave 1 — Read-only foundation:** after TG-001, create the scaffold and platform ports. Complete TG-004 and TG-005, then implement discovery/read adapters, persistent inventory, and the approved shadcn/ui read flows.
+1. **Wave 0 — Parallel evidence:** complete TG-003 and continue TG-007 according to the dashboard's current status. Do not rerun a passed gate unless an invalidation trigger occurs.
+2. **Wave 1 — Read-only foundation:** create the scaffold and platform ports. Complete TG-004 and TG-005, then implement discovery/read adapters, persistent inventory, and the approved shadcn/ui read flows.
 3. **Wave 2 — Mutation safety:** complete TG-006 and the read-only vertical slice, then implement snapshots, fingerprints, transaction state, atomic writes, verification, and recovery.
 4. **Wave 3 — Writable capabilities:** implement MCP/skill write adapters and reviewed synchronization. Implement mutating skills workflows only with TG-008 plus Phase 2 safeguards.
 
