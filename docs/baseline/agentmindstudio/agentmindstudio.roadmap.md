@@ -3,6 +3,8 @@
 **Baseline date:** 2026-07-15  
 **Current state:** No implementation exists; business baseline initialized.
 
+**Authority:** This roadmap inherits product intent from the [Project Nexus](../../nexus/README.md).
+
 ## Roadmap conventions
 
 - A phase is complete only when its exit criteria are demonstrated with fixtures and a packaged Windows build where applicable.
@@ -18,11 +20,13 @@ Tasks:
 - [x] Keep client configuration files authoritative; AMS writes only through explicit user operations.
 - [x] Use SQLite for metadata and filesystem storage for snapshot bytes.
 - [x] Preserve MCP credentials as per-client bindings; do not normalize credential differences as drift.
-- [ ] Decide whether `npx skills` is invoked directly or its open-source library is embedded behind a stable internal interface.
+- [x] Wrap the official `skills` CLI behind `SkillCommandGateway`, pinned to `1.5.17`; do not depend on undocumented library imports.
+- [x] Create and run an isolated repeatable compatibility spike for the pinned skills runner.
 - [x] Restrict product scope to global/user configuration; do not scan or manage project layers.
 - [ ] Define the adapter capability and compatibility contracts.
 - [ ] Collect sanitized fixtures for Copilot, Codex, Kiro, and Kilo global configuration and each MVP artifact type.
-- [ ] Define a client/version support policy and unsupported-version UX.
+- [x] Use a schema/capability gate for unknown client versions and block only unsafe or lossy writes.
+- [x] Establish the greenfield Project Nexus above feature baseline packs.
 - [ ] Threat-model filesystem writes, package installation, MCP process tests, symlinks, and exported bundles.
 
 Exit criteria:
@@ -65,7 +69,10 @@ Tasks:
 - [ ] Build file fingerprints and external-change detection.
 - [ ] Build snapshot creation, retention, restore preview, and restore verification.
 - [ ] Build a declarative sync-plan model with field-level diffs.
+- [ ] Implement endpoint/provenance identity, alias links, name collisions, and intentional-difference classifications.
+- [ ] Build the source-control-style raw and semantic Diff UI.
 - [ ] Implement conflict actions and lossy-conversion warnings.
+- [ ] Implement distinct `AddBinding`, `UpdateBinding`, `DisableBinding`, `RemoveBinding`, `UninstallContent`, `RemoveEverywhere`, and `RestoreSnapshot` operations.
 - [ ] Implement atomic replace and multi-file transaction orchestration.
 - [ ] Implement post-write adapter re-read and validation.
 - [ ] Build the audit history and one-click rollback workflow.
@@ -107,7 +114,9 @@ Exit criteria:
 
 Tasks:
 
-- [ ] Detect Node.js, npm, and `npx` prerequisites.
+- [ ] Detect Node.js/npm prerequisites and exact `skills@1.5.17` runner identity.
+- [ ] Implement the argument-safe, timeout-bound `SkillCommandGateway` and stable failure taxonomy.
+- [ ] Run mutating CLI work in isolated staging and convert verified output into a separately reviewed target plan.
 - [ ] Implement skill discovery/search (`find`) and installed inventory (`list`).
 - [ ] Add source/repository lookup and metadata preview for `add` and `use`.
 - [ ] Fetch into a staging directory before installation.
@@ -115,6 +124,7 @@ Tasks:
 - [ ] Add target client and scope selection.
 - [ ] Display the exact command and telemetry setting.
 - [ ] Stream sanitized progress and expose cancellation behavior.
+- [ ] Detect CLI contract changes even when the process exits zero, and expose diagnostics/issue-report actions.
 - [ ] Re-scan and validate installed artifacts.
 - [ ] Roll back incomplete installations.
 - [ ] Implement update preview and execution (`update`).

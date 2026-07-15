@@ -3,6 +3,8 @@
 **Baseline date:** 2026-07-15  
 **Implemented state:** None. The repository was indexed on this date and contained only the project root. Everything below is proposed, not implemented.
 
+**Authority:** This technical baseline inherits product intent from the [Project Nexus](../../nexus/README.md).
+
 ## 1. Architecture objective
 
 Keep client-specific knowledge at the boundary. The core application should reason about normalized assets, scopes, compatibility, plans, and transactions without knowing whether the target file is JSONC, TOML, YAML, Markdown, or a directory tree.
@@ -57,6 +59,7 @@ Responsibilities:
 - Declare read/write capabilities per artifact type and scope.
 - Expose verification range and migration rules.
 - Block writes when the adapter cannot safely parse, preserve, validate, or round-trip the observed configuration shape.
+- Declare harness surfaces and the resolved config sources consumed by each surface; deduplicate identical resolved paths without collapsing surface capabilities.
 
 ### Platform ports
 
@@ -105,7 +108,10 @@ Responsibilities:
 - Resolve source metadata.
 - Stage downloads outside active client directories.
 - Inspect content and risks.
-- Invoke `npx skills` or another selected backend through a stable interface without coupling the UI to CLI text output.
+- Invoke `skills@1.5.17` with `npm exec --yes --package=skills@1.5.17 -- skills ...` through a stable interface without coupling the UI to CLI text output.
+- Verify exact binary version, output shape, and resulting filesystem state; exit code alone is not a success signal.
+- Isolate staging `HOME`, `USERPROFILE`, `CODEX_HOME`, working directory, and npm cache for mutating CLI operations.
+- Map timeouts, spawn failures, version mismatch, network errors, unparsable output, contract change, and unexpected writes to stable domain errors.
 - Promote verified content to the selected destination transactionally.
 
 ### Metadata and snapshot store
@@ -121,6 +127,8 @@ SQLite is not a CRUD mirror of client configuration. Live client files remain au
 - **Metadata** records where an artifact was observed, which adapter read it, its hash, client coverage, and last validation result.
 - **Audit** records an explicit AMS operation, affected paths, before/after hashes, outcome, and snapshot link so the operation can be explained or reversed.
 - **Profile data** is an optional post-MVP named selection of logical assets for reuse; it does not automatically enforce values onto clients.
+- **Relationship data** records aliases, provenance, bindings, intentional differences, and shared-content references that cannot be reconstructed reliably from current file bytes alone.
+- **Operation state** records planned, snapshotted, applying, verified, restored, and failed transitions so a crash can be diagnosed and recovered.
 
 ## 3. Proposed adapter contract
 
@@ -154,6 +162,8 @@ Required guarantees:
 
 - `id`
 - `clientKind`
+- `harnessKind`
+- `surfaceKind`
 - `displayName`
 - `version`
 - `versionSource`
@@ -181,6 +191,8 @@ Required guarantees:
 - `id`
 - `kind`: mcp-server, skill, instruction
 - `canonicalName`
+- `identityFingerprint`: endpoint evidence for MCP or provenance/content evidence for skills and instructions
+- `aliases`
 - `portableFields`
 - `clientExtensions`
 - `provenance`
@@ -197,6 +209,15 @@ Required guarantees:
 - `effectiveState`
 - `compatibilityState`
 - `lastObservedFingerprint`
+- `differenceIntent`: unknown, intentional, pending-review
+
+### DriftRelation
+
+- `leftBindingId`
+- `rightBindingId`
+- `classification`: missing-binding, structural-difference, version-drift, name-collision, linked-alias, credential-binding-difference, unsupported-field
+- `semanticDiff`
+- `userResolution`
 
 ### SyncPlan
 
@@ -239,6 +260,8 @@ Every source-target pair should produce one of these states:
 Compatibility is computed from behavior, not only filenames or schema keys.
 
 ## 6. Mutation sequence
+
+Mutation plans use explicit domain operations: `AddBinding`, `UpdateBinding`, `DisableBinding`, `RemoveBinding`, `UninstallContent`, `RemoveEverywhere`, and `RestoreSnapshot`. Removing a binding never implies deleting shared content.
 
 ```mermaid
 sequenceDiagram
@@ -311,7 +334,9 @@ AgentMindStudio/
     roundtrip/
     failure-injection/
   docs/
+    nexus/
     baseline/
+    spikes/
 ```
 
 ## 9. Required test strategy

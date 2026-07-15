@@ -3,6 +3,8 @@
 **Baseline date:** 2026-07-15  
 **Purpose:** Prevent unverified product assumptions from becoming implementation facts.
 
+**Authority:** This evidence log inherits product intent from the [Project Nexus](../../nexus/README.md).
+
 ## 1. Confirmed decisions
 
 These statements come directly from the product request and can be treated as current decisions:
@@ -22,6 +24,12 @@ These statements come directly from the product request and can be treated as cu
 | D-011 | MVP supports Copilot, Codex, Kiro, and Kilo for both inventory and planned write features. | Claude Code, Cursor, Cline, and other clients are post-MVP adapters. |
 | D-012 | Advanced users can edit Raw Config as an exceptional workflow. | Raw editing must still use validation, diff, snapshot, confirmation, and rollback. |
 | D-013 | SQLite stores AMS metadata; filesystem storage holds restorable snapshot content. | Client files remain authoritative and are not duplicated into SQLite as a second live configuration source. |
+| D-014 | Harness surfaces are modeled explicitly; a common config source is recorded only when verified. | One resolved file may serve several surfaces, while Copilot CLI and VS Code remain distinct where their sources differ. |
+| D-015 | Same-name/different-endpoint MCPs are conflicts; different-name/same-endpoint MCPs are linkable aliases. | MCP identity uses endpoint evidence and reviewed alias relationships, not name alone. |
+| D-016 | The main conflict experience is a source-control-style semantic Diff UI. | Raw and semantic differences, affected paths, and operations are visible before Apply. |
+| D-017 | The official skills CLI is wrapped behind a stable gateway and pinned to `skills@1.5.17`. | Upgrades require an isolated spike; UI handles contract failures without mutating user config. |
+| D-018 | Unknown client versions use a schema/capability gate. | Unverified versions can remain readable while unsafe or lossy writes are blocked. |
+| D-019 | The greenfield foundation is a Project Nexus above baseline packs. | Product invariants live in Nexus; baselines track planned and implemented work. |
 
 ## 2. Observed local evidence
 
@@ -48,13 +56,13 @@ The facts below were checked against official product documentation on 2026-07-1
 
 | Client/ecosystem | Verified fact | Source |
 |---|---|---|
-| Codex | `CODEX_HOME` defaults to `~/.codex`; personal and project config layers exist; MCP uses TOML; global and repo instruction/skill locations differ. | [Codex docs](https://developers.openai.com/codex/config-basic) |
+| Codex | App, CLI, and IDE share the same `~/.codex/config.toml` MCP configuration on the same host. | [Codex MCP](https://developers.openai.com/codex/mcp) |
 | Claude Code | Settings, MCP, instructions, and skills use multiple files and scope rules; project MCP can live in `.mcp.json`, while user/local MCP state can be in `~/.claude.json`. | [Settings](https://code.claude.com/docs/en/settings), [MCP](https://code.claude.com/docs/en/mcp) |
 | Cursor | Global MCP uses `~/.cursor/mcp.json`, project MCP uses `.cursor/mcp.json`, and global versus project rule semantics differ. | [MCP](https://docs.cursor.com/context/model-context-protocol), [rules](https://docs.cursor.com/context/rules) |
-| Kiro | Global, project, and agent scopes exist and have client-defined precedence. | [Kiro configuration](https://kiro.dev/docs/cli/chat/configuration/) |
-| Kilo Code | Global core configuration is under `~/.config/kilo/`; skills may be under `~/.kilo/skills/`; project config has multiple accepted paths and precedence. | [Settings](https://kilo.ai/docs/getting-started/settings), [skills](https://kilo.ai/docs/customize/skills) |
+| Kiro | IDE and CLI both document `~/.kiro/settings/mcp.json` for global MCP; workspace and agent layers remain separate. | [IDE MCP](https://kiro.dev/docs/mcp/configuration/), [CLI MCP](https://kiro.dev/docs/cli/mcp/configuration/) |
+| Kilo Code | CLI, VS Code, and JetBrains read the same documented JSONC core configuration; skills can still use a different root. | [Settings](https://kilo.ai/docs/getting-started/settings), [skills](https://kilo.ai/docs/customize/skills) |
 | Cline | Global settings are separated under `~/.cline/data/settings/`; global/project rules and skills live in other roots, with compatibility paths also supported. | [Cline configuration](https://docs.cline.bot/getting-started/config) |
-| Copilot CLI | Its user configuration directory can contain settings, MCP configuration, personal instructions, instruction folders, and skills. | [Copilot CLI config directory](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference) |
+| Copilot | CLI uses `~/.copilot/mcp-config.json`; VS Code MCP configuration is a distinct source/format rather than a universal shared harness file. | [CLI config directory](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference), [CLI commands](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) |
 | skills.sh | The documented primary installation method is `npx skills add`; anonymous telemetry is documented with `DISABLE_TELEMETRY=1` opt-out. | [skills CLI](https://www.skills.sh/docs/cli) |
 
 ## 4. Closed former open decisions
@@ -70,10 +78,13 @@ The following items retain their original `OD` identifiers for history but are n
 | OD-006 | MVP client set is Copilot, Codex, Kiro, and Kilo. | Other clients are expansion adapters, not MVP read targets. |
 | OD-007 | Raw Config editing is supported as an advanced path. | UI forms remain primary; raw writes use the same safety transaction as structured changes. |
 | OD-008 | SQLite for metadata and filesystem for snapshot bytes. | AMS can relate observations and recover operations without replacing client-owned files. |
+| OD-004 | Wrap the official CLI through `SkillCommandGateway`, pin `skills@1.5.17`, and require isolated compatibility spikes. | No dependency on undocumented package exports or human CLI text in UI code. |
+| OD-009 | Use a schema/capability gate. | Warn for unverified versions; block writes only when parse, preservation, validation, or safe round-trip cannot be demonstrated. |
+| OD-010 | Use portable/manual builds for private MVP; defer signed public updates. | Signing, update feeds, migration rollback, and downgrade behavior move to a later release phase. |
 
-## 5. Open business decisions
+## 5. Superseded option analysis and remaining open decisions
 
-Only the decisions below remain open.
+OD-004, OD-009, and OD-010 are closed in section 4. Their option analysis is retained below as decision history; the former recommendations are now the selected directions.
 
 ### OD-004 — skills.sh integration boundary
 
@@ -111,6 +122,12 @@ Options:
 
 **Current recommendation:** Use a portable or simple manual installer for private MVP testing. Before public release, require signed releases; add opt-in auto-update only after update rollback and SQLite migration behavior are tested.
 
+### Remaining open decisions
+
+- **NOD-001:** Which Copilot surface is writable first: CLI, VS Code, or both as separate capabilities?
+- **NOD-002:** Final UI delivery workflow. Current recommendation: explore variants with Google Stitch, then implement owned components with shadcn/ui.
+- **NOD-003:** Which global instruction/rule families enter the first vertical slice after sanitized fixtures are collected?
+
 ## 6. Assumptions requiring validation
 
 | ID | Assumption | Validation method | Risk if false |
@@ -119,7 +136,7 @@ Options:
 | A-002 | Most valuable portable assets are MCP, skills, and instructions. | Inventory current users and rank migration pain. | MVP targets the wrong asset mix. |
 | A-003 | Client configuration can be safely round-tripped with available parsers. | Golden-file fixture tests including comments and unknown fields. | Writes damage hand-maintained files. |
 | A-004 | Manual reviewed operations are sufficient for MVP. | Prototype usability tests. | Auto-sync may need earlier prioritization. |
-| A-005 | `npx skills` can provide stable enough machine-readable behavior for a desktop wrapper. | CLI spike across success, failure, cancel, and telemetry cases. | Requires library integration or custom installer. |
+| A-005 | The pinned skills CLI remains usable behind guarded semantic checks despite incomplete structured output. | Repeat the project-scoped isolated spike for every candidate version and wrapper change. | Freeze upgrades or replace the backend. |
 | A-006 | Client versions can be detected reliably. | Compare executable, extension, package, and config markers. | Compatibility status becomes misleading. |
 | A-007 | Secret fields can be identified without resolving their values. | Test real sanitized MCP configs and false positives. | Export or diagnostics may leak secrets. |
 | A-008 | ElectroBun supports the required filesystem, process, signing, and update flows on Windows. | Early packaging and process-runner spike. | Framework change or native helper required. |
@@ -136,6 +153,8 @@ Options:
 - **R-008:** “The app can manage enterprise policy like user settings.” Rejected; managed layers have different authority and may be intentionally immutable.
 - **R-009:** “A structural MCP match requires identical credentials across clients.” Rejected; each client can intentionally use a different credential profile.
 - **R-010:** “Global management requires recursively scanning the drive for projects.” Rejected; AMS is bounded to global roots and explicit user-selected global locations.
+
+- **R-011:** "Every surface in one harness always reads one shared source." Rejected; sharing is true for several documented sources but not universal, notably across Copilot CLI and VS Code.
 
 ## 8. Unknowns to keep visible in UI and diagnostics
 
