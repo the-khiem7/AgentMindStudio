@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1040" viewBox="0 0 1600 1040" role="img" aria-labelledby="title desc">
+  <title id="title">AgentMindStudio TG-007 proposed flow storyboard</title>
+  <desc id="desc">Eight dark interface panels cover first-run discovery, coverage, name collision, alias linking, semantic and raw diff, apply review, skills error, and read-only instruction comparison.</desc>
+  <defs>
+    <style>
+      .bg{fill:#090d13}.panel{fill:#111824;stroke:#2c3748;stroke-width:2}.inner{fill:#171f2c;stroke:#334054}.t{fill:#f5f7fb;font:700 21px 'Segoe UI',sans-serif}.k{fill:#86a8ff;font:700 12px 'Segoe UI',sans-serif;letter-spacing:1.5px}.b{fill:#dce4ef;font:14px 'Segoe UI',sans-serif}.m{fill:#9aa9bd;font:12px 'Segoe UI',sans-serif}.mono{fill:#b9c5d6;font:11px Consolas,monospace}.ok{fill:#74d3a3}.warn{fill:#f3c969}.bad{fill:#ff8c8c}.info{fill:#8fd9ef}.line{stroke:#334054;stroke-width:1}.pill{fill:#202b3b;stroke:#3b4a60}.accent{fill:#dce6ff}.dark{fill:#111621;font:700 12px 'Segoe UI',sans-serif}.num{fill:#86a8ff;font:700 11px 'Segoe UI',sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="1600" height="1040"/>
+  <text x="40" y="45" class="k">AGENTMINDSTUDIO · TG-007</text>
+  <text x="40" y="78" class="t" style="font-size:30px">Proposed UX flow contract</text>
+  <text x="1180" y="70" class="m">Exploration export · not production source</text>
+
+  <!-- 01 -->
+  <g transform="translate(40 110)">
+    <rect class="panel" width="750" height="200" rx="14"/>
+    <text x="22" y="30" class="num">01 · FIRST-RUN DISCOVERY</text><text x="22" y="60" class="t">See what each AI client reads</text>
+    <rect class="inner" x="22" y="78" width="220" height="96" rx="8"/><text x="38" y="102" class="b">Copilot CLI</text><text x="38" y="126" class="ok b">✓ Ready</text><text x="38" y="150" class="mono">~/.copilot/mcp-config.json</text>
+    <rect class="inner" x="256" y="78" width="220" height="96" rx="8"/><text x="272" y="102" class="b">Codex</text><text x="272" y="126" class="ok b">✓ Ready</text><text x="272" y="150" class="mono">…\.codex\config.toml</text>
+    <rect class="inner" x="490" y="78" width="238" height="96" rx="8"/><text x="506" y="102" class="b">Kiro</text><text x="506" y="126" class="bad b">× Permission blocked</text><text x="506" y="150" class="m">Nothing was changed.</text>
+  </g>
+
+  <!-- 02 -->
+  <g transform="translate(810 110)">
+    <rect class="panel" width="750" height="200" rx="14"/>
+    <text x="22" y="30" class="num">02 · UNIFIED INVENTORY</text><text x="22" y="60" class="t">Coverage across surfaces</text>
+    <line class="line" x1="22" y1="84" x2="728" y2="84"/><text x="22" y="105" class="m">MCP SERVER</text><text x="190" y="105" class="m">COPILOT CLI</text><text x="350" y="105" class="m">CODEX</text><text x="510" y="105" class="m">KIRO</text><text x="650" y="105" class="m">KILO</text>
+    <text x="22" y="135" class="b">filesystem</text><text x="190" y="135" class="ok b">✓ Present</text><text x="350" y="135" class="warn b">— Missing</text><text x="510" y="135" class="ok b">✓ Present</text><text x="650" y="135" class="ok b">✓ Present</text>
+    <text x="22" y="166" class="b">prod-db</text><text x="190" y="166" class="bad b">! Collision</text><text x="350" y="166" class="bad b">! Collision</text><text x="510" y="166" class="m">⊘ Incompatible</text><text x="650" y="166" class="info b">⌖ Override</text>
+  </g>
+
+  <!-- 03 -->
+  <g transform="translate(40 330)">
+    <rect class="panel" width="750" height="200" rx="14"/>
+    <text x="22" y="30" class="num">03 · NAME COLLISION</text><text x="22" y="60" class="t">Same name, different endpoint</text>
+    <rect x="22" y="78" width="706" height="36" rx="6" fill="#28181c" stroke="#734249"/><text x="38" y="101" class="bad b">! Endpoint fingerprints identify different MCP servers</text>
+    <text x="22" y="139" class="m">Copilot CLI</text><text x="180" y="139" class="mono">https://mcp-a.example.com</text><text x="480" y="139" class="m">credential preserved</text>
+    <text x="22" y="162" class="m">Codex</text><text x="180" y="162" class="mono">https://mcp-b.example.com</text><text x="480" y="162" class="m">credential preserved</text>
+    <text x="600" y="186" class="bad m">Link aliases disabled</text>
+  </g>
+
+  <!-- 04 -->
+  <g transform="translate(810 330)">
+    <rect class="panel" width="750" height="200" rx="14"/>
+    <text x="22" y="30" class="num">04 · ALIAS LINKING</text><text x="22" y="60" class="t">Different names, same endpoint</text>
+    <rect class="inner" x="22" y="80" width="294" height="70" rx="8"/><text x="38" y="106" class="b">Copilot CLI · context7</text><text x="38" y="130" class="mono">fingerprint 8f21…</text>
+    <path d="M320 115 H426" stroke="#8fd9ef" stroke-width="3" stroke-dasharray="6 5"/><text x="352" y="104" class="info m">link</text>
+    <rect class="inner" x="430" y="80" width="298" height="70" rx="8"/><text x="446" y="106" class="b">Kiro · context-7</text><text x="446" y="130" class="mono">fingerprint 8f21…</text>
+    <rect class="accent" x="22" y="163" width="184" height="25" rx="6"/><text x="38" y="180" class="dark">Link as one logical MCP</text><text x="224" y="180" class="m">Native files remain unchanged</text>
+  </g>
+
+  <!-- 05 -->
+  <g transform="translate(40 550)">
+    <rect class="panel" width="750" height="200" rx="14"/>
+    <text x="22" y="30" class="num">05 · RAW + SEMANTIC DIFF</text><text x="22" y="60" class="t">Understand domain meaning before action</text>
+    <rect class="pill" x="22" y="78" width="90" height="26" rx="13"/><text x="40" y="96" class="b">Semantic</text><text x="130" y="96" class="m">Raw</text>
+    <rect class="inner" x="22" y="116" width="218" height="60" rx="7"/><text x="36" y="138" class="warn b">~ Endpoint changed</text><text x="36" y="159" class="m">identity differs</text>
+    <rect class="inner" x="252" y="116" width="218" height="60" rx="7"/><text x="266" y="138" class="info b">◉ Credential preserved</text><text x="266" y="159" class="m">values redacted</text>
+    <rect class="inner" x="482" y="116" width="246" height="60" rx="7"/><text x="496" y="138" class="b">Client-only tool policy</text><text x="496" y="159" class="m">remains untouched</text>
+  </g>
+
+  <!-- 06 -->
+  <g transform="translate(810 550)">
+    <rect class="panel" width="750" height="200" rx="14"/>
+    <text x="22" y="30" class="num">06 · FINAL APPLY SHEET</text><text x="22" y="60" class="t">Exact target and recovery review</text>
+    <text x="22" y="92" class="m">Plan remains visible</text><text x="22" y="116" class="mono">UpdateBinding · Codex user</text><text x="22" y="140" class="mono">credential: preserve</text>
+    <rect class="inner" x="340" y="72" width="388" height="110" rx="8"/><text x="356" y="96" class="warn b">! Apply binding update?</text><text x="356" y="119" class="mono">…\.codex\config.toml</text><text x="356" y="142" class="ok b">✓ Snapshot · recheck · reparse</text><rect x="620" y="150" width="92" height="24" rx="5" class="accent"/><text x="642" y="167" class="dark">Apply</text>
+  </g>
+
+  <!-- 07 -->
+  <g transform="translate(40 770)">
+    <rect class="panel" width="750" height="230" rx="14"/>
+    <text x="22" y="30" class="num">07 · SKILLS ERROR</text><text x="22" y="60" class="t">Skills runner incompatible</text>
+    <rect x="22" y="78" width="706" height="36" rx="6" fill="#28181c" stroke="#734249"/><text x="38" y="101" class="bad b">× Zero exit, unexpected guarded output shape</text>
+    <rect class="inner" x="22" y="126" width="164" height="60" rx="7"/><text x="34" y="148" class="b">What failed?</text><text x="34" y="168" class="m">Inventory verify</text>
+    <rect class="inner" x="198" y="126" width="164" height="60" rx="7"/><text x="210" y="148" class="b">Protected?</text><text x="210" y="168" class="ok m">No files changed</text>
+    <rect class="inner" x="374" y="126" width="164" height="60" rx="7"/><text x="386" y="148" class="b">Cause?</text><text x="386" y="168" class="m">Contract mismatch</text>
+    <rect class="accent" x="550" y="126" width="178" height="60" rx="7"/><text x="565" y="150" class="dark">Retry check</text><text x="565" y="170" class="dark">Open diagnostics</text>
+  </g>
+
+  <!-- 08 -->
+  <g transform="translate(810 770)">
+    <rect class="panel" width="750" height="230" rx="14"/>
+    <text x="22" y="30" class="num">08 · INSTRUCTION COMPARISON</text><text x="22" y="60" class="t">Read-only behavior comparison</text>
+    <rect x="22" y="78" width="706" height="40" rx="6" fill="#10212a" stroke="#3b6b7d"/><text x="38" y="103" class="info b">▣ Read-only · no create, edit, sync, remove, conversion, or Apply</text>
+    <text x="22" y="148" class="m">SEMANTIC FIELD</text><text x="240" y="148" class="m">CODEX</text><text x="480" y="148" class="m">KIRO</text>
+    <text x="22" y="175" class="b">Activation</text><text x="240" y="175" class="b">Always in scope</text><text x="480" y="175" class="warn b">Manual only</text>
+    <text x="22" y="201" class="b">Compatibility</text><text x="240" y="201" class="b">Source behavior</text><text x="480" y="201" class="bad b">⊘ Cannot represent exactly</text>
+  </g>
+</svg>
