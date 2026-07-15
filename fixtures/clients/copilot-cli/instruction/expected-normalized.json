@@ -1,0 +1,1 @@
+{"surface":"copilot-cli","instructions":[{"source":"$COPILOT_HOME/copilot-instructions.md","activation":"always","scope":"user"},{"source":"$COPILOT_HOME/instructions/code-style.instructions.md","activation":"always","scope":"user"}],"warnings":[{"case":"empty.instructions.md","code":"EMPTY_INSTRUCTION_IGNORED"}]}

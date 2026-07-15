@@ -1,0 +1,8 @@
+{
+  // instruction order is meaningful
+  "instructions": [
+    ".kilo/rules/always.md",
+    ".kilo/rules/*.fixture.md",
+    ".kilo/rules/missing.md"
+  ]
+}

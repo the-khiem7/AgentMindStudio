@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-07-16T02:24:56+07:00",
+  "privacy": {
+    "configBytesRead": false,
+    "childNamesEnumerated": false,
+    "resolvedUserPathEmitted": false,
+    "authStateRead": false
+  },
+  "environment": {
+    "os": "Microsoft Windows NT 10.0.22631.0",
+    "architecture": "X64",
+    "powershell": "7.5.4"
+  },
+  "commands": [
+    {
+      "command": "codex",
+      "present": true,
+      "version": "codex-cli 0.125.0"
+    },
+    {
+      "command": "copilot",
+      "present": false,
+      "version": null
+    },
+    {
+      "command": "kiro-cli",
+      "present": true,
+      "version": "kiro-cli-chat 2.8.0"
+    },
+    {
+      "command": "kilo",
+      "present": true,
+      "version": "7.3.21"
+    },
+    {
+      "command": "code",
+      "present": true,
+      "version": "1.128.1 5264f2156cbcd7aea5fd004d29eaa10209155d66 x64"
+    }
+  ],
+  "vscodeExtensions": [
+    "kilocode.kilo-code@7.4.7",
+    "openai.chatgpt@26.707.71524"
+  ],
+  "paths": [
+    {
+      "pathToken": "$CODEX_HOME/config.toml",
+      "exists": true,
+      "kind": "file",
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$HOME/.agents/skills",
+      "exists": true,
+      "kind": "directory",
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$CODEX_HOME/AGENTS.md",
+      "exists": true,
+      "kind": "file",
+      "reparsePoint": true
+    },
+    {
+      "pathToken": "$CODEX_HOME/AGENTS.override.md",
+      "exists": false,
+      "kind": null,
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$KIRO_HOME/settings/mcp.json",
+      "exists": true,
+      "kind": "file",
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$KIRO_HOME/skills",
+      "exists": true,
+      "kind": "directory",
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$KIRO_HOME/steering",
+      "exists": true,
+      "kind": "directory",
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$HOME/.config/kilo/kilo.jsonc",
+      "exists": true,
+      "kind": "file",
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$HOME/.kilo/skills",
+      "exists": false,
+      "kind": null,
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$COPILOT_HOME/mcp-config.json",
+      "exists": false,
+      "kind": null,
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$COPILOT_HOME/skills",
+      "exists": false,
+      "kind": null,
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$COPILOT_HOME/copilot-instructions.md",
+      "exists": false,
+      "kind": null,
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$COPILOT_HOME/instructions",
+      "exists": false,
+      "kind": null,
+      "reparsePoint": false
+    },
+    {
+      "pathToken": "$APPDATA/Code/User/mcp.json",
+      "exists": true,
+      "kind": "file",
+      "reparsePoint": false
+    }
+  ],
+  "conclusion": "pass-metadata-only"
+}

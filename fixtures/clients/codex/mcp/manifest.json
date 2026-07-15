@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "surface": "codex",
+  "artifact": "mcp",
+  "formatSupportsComments": true,
+  "provenanceCategory": "sanitized-local-shape-plus-official-example",
+  "sanitizationDate": "2026-07-16",
+  "sourceVersion": "codex-cli 0.125.0; official docs reviewed 2026-07-16",
+  "expectedNormalizedOutput": "expected-normalized.json",
+  "cases": [
+    {"id":"empty","path":"empty.toml","expectedParseState":"empty","scenarios":["empty-minimal"]},
+    {"id":"layered","path":"layered","expectedParseState":"valid","scenarios":["representative-valid","comments-preservation","unknown-field","name-collision","linked-alias","credential-binding-difference"]},
+    {"id":"malformed","path":"malformed.toml","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}

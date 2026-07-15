@@ -1,0 +1,8 @@
+{
+  // fixture comment must be preserved
+  "mcp": {
+    "collision": {"type":"remote","url":"https://one.example.invalid/mcp","headers":{"Authorization":"${FIXTURE_ONE_TOKEN}"},"fixture_unknown":"preserve-me"},
+    "primary-alias": {"type":"remote","url":"https://shared.example.invalid/mcp","headers":{"Authorization":"${FIXTURE_USER_TOKEN}"}},
+    "local-tool": {"type":"local","command":["fixture-mcp","--mode","safe"],"environment":{"API_TOKEN":"${FIXTURE_LOCAL_TOKEN}"},"enabled":true}
+  }
+}

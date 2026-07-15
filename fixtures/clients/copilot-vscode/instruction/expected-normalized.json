@@ -1,0 +1,1 @@
+{"surface":"copilot-vscode","instructions":[{"name":"always","activation":"fileMatch","pattern":"**"},{"name":"json","activation":"fileMatch","pattern":"fixtures/**/*.json"},{"name":"audit","activation":"semantic","description":"Audit sanitized client fixture evidence and expected outputs."}],"warnings":[{"case":"malformed.instructions.md","code":"INVALID_FRONTMATTER"}]}

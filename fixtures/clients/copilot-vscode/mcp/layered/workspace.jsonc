@@ -1,0 +1,6 @@
+{
+  "servers": {
+    "collision": {"type":"http","url":"https://two.example.invalid/mcp","headers":{"Authorization":"${input:fixtureTwoToken}"}},
+    "secondary-alias": {"type":"http","url":"https://shared.example.invalid/mcp","headers":{"Authorization":"${input:fixtureProjectToken}"}}
+  }
+}

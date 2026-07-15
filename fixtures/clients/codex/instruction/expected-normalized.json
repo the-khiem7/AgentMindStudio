@@ -1,0 +1,1 @@
+{"surface":"codex","instructions":[{"id":"global-base","source":"$CODEX_HOME/AGENTS.md","activation":"always","precedence":0,"selected":false},{"id":"global-override","source":"$CODEX_HOME/AGENTS.override.md","activation":"always","precedence":1,"selected":true}],"warnings":[{"case":"empty-AGENTS.md","code":"EMPTY_INSTRUCTION_IGNORED"}]}

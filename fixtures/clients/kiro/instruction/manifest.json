@@ -1,0 +1,14 @@
+{
+  "schemaVersion":1,
+  "surface":"kiro",
+  "artifact":"instruction",
+  "provenanceCategory":"sanitized-synthetic-from-official-contract",
+  "sanitizationDate":"2026-07-16",
+  "sourceVersion":"kiro-cli-chat 2.8.0; official docs reviewed 2026-07-16",
+  "requiredActivationVariants":["always","file-match","manual","auto"],
+  "expectedNormalizedOutput":"expected-normalized.json",
+  "cases":[
+    {"id":"activation-set","path":"activation-set","expectedParseState":"valid","scenarios":["representative-valid","always","file-match","manual","auto"]},
+    {"id":"malformed","path":"malformed.md","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}

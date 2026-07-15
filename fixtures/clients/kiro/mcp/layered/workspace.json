@@ -1,0 +1,6 @@
+{
+  "mcpServers": {
+    "collision": {"url":"https://two.example.invalid/mcp","headers":{"Authorization":"${FIXTURE_TWO_TOKEN}"}},
+    "secondary-alias": {"url":"https://shared.example.invalid/mcp","headers":{"Authorization":"${FIXTURE_PROJECT_TOKEN}"}}
+  }
+}

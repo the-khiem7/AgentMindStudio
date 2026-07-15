@@ -235,8 +235,8 @@ Exit criteria:
 
 ## First next action
 
-Assign an owner and start TG-003 by producing one source/precedence evidence record per MVP surface under `docs/spikes/client-surface-config/`, then update the Nexus client-surface matrix from that evidence. Use the accepted [ADR-0001 adapter contract](../../adr/ADR-0001-adapter-capability-contract.md) and its capability vocabulary; do not treat the TG-002 proof paths or synthetic preservation claims as TG-003/TG-004 production evidence.
+Implement the first read-only discovery/parse/normalize vertical slice against the passed TG-002 contract and TG-003/TG-004 evidence, beginning with one locally present source and consuming only fixture manifests whose verification report passes. Keep source acquisition in the application/platform layer and adapters side-effect free.
 
-TG-007 UI exploration may proceed independently in the same Wave 0. TG-002 now permits contract-shaped fixture design, but complete TG-004 capability claims only after TG-003 verifies source rules and each sanitized fixture proves the relevant parser/preservation behavior.
+TG-005 persistence and TG-007 UI exploration may proceed independently. No read evidence authorizes writes: instruction behavior remains read-only, and MCP/skill mutation still waits for Phase 2 safety gates and adapter-specific write-preservation tests.
 
 The Phase 0 adapter proof may demonstrate discovery, normalization, comparison, and a side-effect-free dry-run. It must not implement real snapshot/write/rollback behavior; those capabilities begin only after TG-006 and the Phase 1 read-only exit permit entry into Phase 2.

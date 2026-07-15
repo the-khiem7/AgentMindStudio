@@ -1,0 +1,1 @@
+{"surface":"kiro","skills":[{"name":"fixture-review","description":"Review fixture-only changes without accessing credentials.","activation":"on-demand","source":"$KIRO_HOME/skills/fixture-review","unknownFields":["metadata.fixture-extension"]}]}

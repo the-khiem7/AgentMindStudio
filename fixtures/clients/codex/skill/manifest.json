@@ -1,0 +1,13 @@
+{
+  "schemaVersion":1,
+  "surface":"codex",
+  "artifact":"skill",
+  "provenanceCategory":"sanitized-synthetic-from-official-contract",
+  "sanitizationDate":"2026-07-16",
+  "sourceVersion":"codex-cli 0.125.0; official docs reviewed 2026-07-16",
+  "expectedNormalizedOutput":"expected-normalized.json",
+  "cases":[
+    {"id":"valid","path":"valid-skill","expectedParseState":"valid","scenarios":["representative-valid","unknown-field"]},
+    {"id":"malformed","path":"malformed-skill","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}
