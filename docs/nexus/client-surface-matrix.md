@@ -39,7 +39,6 @@ additional roots remains explicit in the evidence matrix.
 - [Kilo settings](https://kilo.ai/docs/getting-started/settings)
 - [Copilot CLI configuration directory](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference)
 - [Copilot CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference)
-- [Copilot CLI configuration directory](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference)
 - [VS Code MCP configuration](https://code.visualstudio.com/docs/agent-customization/mcp-servers)
 - [VS Code Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)
 - [VS Code custom instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions)

@@ -57,6 +57,8 @@ This supports local discovery feasibility, but does not prove that each path con
 
 TG-001 also produced local runtime evidence on 2026-07-15: ElectroBun 1.18.1 with Bun 1.3.13 and SQLite 3.51.2 passed the required Windows filesystem, process, SQLite, stable packaging, and non-elevated packaged-runtime checks. See the [spike report](../../spikes/electrobun-foundation/2026-07-15-electrobun-1.18.1-windows.md) and [machine-readable result](../../spikes/electrobun-foundation/runs/20260715-174500/results.json). This evidence does not cover signing, installer execution, or production update delivery.
 
+TG-005 produced implementation evidence on 2026-07-16: migration `0001` and its operation journal passed clean/idempotent migration, representative metadata close/reopen, failed-transaction rollback, secret/snapshot-content schema exclusion, shared-content deletion guards, state-transition, crash-classification, strict TypeScript, ElectroBun Windows dev build, and packaged migration initialization checks. See [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md) and the canonical completion record in the [technical-gate register](agentmindstudio.technical-gates.md). This evidence does not claim that client adapters, snapshot bytes, mutation execution, recovery execution, UI windows, installer execution, signing, or updates exist.
+
 ## 3. Verified external facts
 
 The facts below were checked against official product documentation on 2026-07-15. They are evidence for the initial adapter model, not permanent guarantees.
