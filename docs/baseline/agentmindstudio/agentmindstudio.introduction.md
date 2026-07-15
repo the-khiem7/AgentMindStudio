@@ -58,6 +58,9 @@ The following inputs are explicit in the product request:
 - A harness may expose several surfaces. Shared configuration sources are recorded when verified, but never assumed for every surface.
 - Same-name MCPs with different endpoints are conflicts; differently named MCPs with the same endpoint are linkable aliases.
 - The default drift workflow is a source-control-style semantic Diff UI.
+- Copilot CLI and Copilot VS Code are both in MVP as distinct surfaces; only their user/global sources are managed.
+- Google Stitch is used for UI exploration, while production UI is implemented and maintained with shadcn/ui.
+- Instruction/rule capability is read-only in MVP: inventory, activation/precedence analysis, coverage, and diff without mutation.
 
 ## 4. Actors and personas
 
@@ -117,6 +120,7 @@ Live client files are the source of truth. SQLite metadata records what AMS obse
 - **BR-DISC-003:** Show client status as detected, not installed, partially configured, unsupported version, or permission blocked.
 - **BR-DISC-004:** Show which layers are active, their precedence, whether they are writable, and whether a restart/reload is required after changes.
 - **BR-DISC-005:** Allow users to add a custom path without replacing built-in discovery rules.
+- **BR-DISC-006:** Detect Copilot CLI and Copilot VS Code independently and show which user/global sources each surface consumes.
 
 ### 7.2 Unified inventory
 
@@ -157,12 +161,12 @@ Live client files are the source of truth. SQLite metadata records what AMS obse
 
 - **BR-INS-001:** Inventory global/user instructions with their activation rules and precedence. Project instructions are outside MVP scope.
 - **BR-INS-002:** Distinguish always-on instructions, path-conditional rules, manually invoked prompts, and agent definitions.
-- **BR-INS-003:** Provide compatibility outcomes instead of promising direct conversion when semantics differ.
-- **BR-INS-004:** Preserve original source and client-specific metadata when a converted representation is generated.
+- **BR-INS-003:** Provide read-only compatibility and semantic-difference outcomes without offering cross-client conversion in MVP.
+- **BR-INS-004:** Do not create, edit, synchronize, remove, or Raw Config-write an instruction/rule source in MVP.
 
 ### 7.6 Cross-client synchronization
 
-- **BR-SYNC-001:** Let the user select a source artifact and one or more target clients in global/user scope.
+- **BR-SYNC-001:** Let the user select a source MCP or skill and one or more target surfaces in global/user scope. Instructions are excluded from MVP mutation.
 - **BR-SYNC-002:** Generate a dry-run plan before any write.
 - **BR-SYNC-003:** Classify each target as exact, convertible, partial, unsupported, or blocked.
 - **BR-SYNC-004:** Show field-level differences and describe semantic changes in plain language.
@@ -262,15 +266,16 @@ Live client files are the source of truth. SQLite metadata records what AMS obse
 
 - Windows, single local user, local-only data, with platform ports designed for later macOS support.
 - Global/user configuration only; no project or drive scanning.
-- Detection, inventory, comparison, and safe global writes for GitHub Copilot, Codex, Kiro, and Kilo Code.
-- Artifact types: MCP servers, Agent Skills, and instructions/rules.
-- One-time cross-client sync with dry-run, conflict handling, snapshot, verification, and rollback.
+- Detection, inventory, comparison, and safe global writes for GitHub Copilot, Codex, Kiro, and Kilo Code; Copilot includes separate CLI and VS Code surfaces.
+- Artifact types: writable MCP servers and Agent Skills, plus read-only instructions/rules.
+- One-time MCP/skill cross-client sync with dry-run, conflict handling, snapshot, verification, and rollback.
 - UI workflows for the supported `npx skills` command family, starting with inventory, discovery, install, update, remove, one-time use, and initialization.
 - Structured editor for common fields plus an advanced Raw Config editor routed through validation and rollback safeguards.
 - Local metadata and audit history. Named portability profiles are post-MVP unless user testing shows they are required earlier.
 
 ### After MVP
 
+- Instruction/rule create, edit, sync, remove, semantic conversion, and Raw Config writes.
 - Additional adapters such as Claude Code, Cursor, and Cline.
 - Hooks, agents, prompts, plugins, model/provider settings, and permissions.
 - Optional encrypted cloud or Git synchronization.

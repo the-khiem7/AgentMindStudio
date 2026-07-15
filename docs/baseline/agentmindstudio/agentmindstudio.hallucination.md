@@ -30,6 +30,9 @@ These statements come directly from the product request and can be treated as cu
 | D-017 | The official skills CLI is wrapped behind a stable gateway and pinned to `skills@1.5.17`. | Upgrades require an isolated spike; UI handles contract failures without mutating user config. |
 | D-018 | Unknown client versions use a schema/capability gate. | Unverified versions can remain readable while unsafe or lossy writes are blocked. |
 | D-019 | The greenfield foundation is a Project Nexus above baseline packs. | Product invariants live in Nexus; baselines track planned and implemented work. |
+| D-020 | Both Copilot CLI and Copilot VS Code are MVP surfaces. | They remain distinct adapters/capability sets and AMS manages only their user/global sources. |
+| D-021 | Google Stitch is the UI exploration tool and shadcn/ui is the production implementation foundation. | Generated designs inform the product, while maintained component source stays in the repository. |
+| D-022 | Instruction/rule support is read-only in MVP. | Inventory, activation/precedence analysis, coverage, and diff are allowed; instruction mutation is deferred. |
 
 ## 2. Observed local evidence
 
@@ -81,8 +84,11 @@ The following items retain their original `OD` identifiers for history but are n
 | OD-004 | Wrap the official CLI through `SkillCommandGateway`, pin `skills@1.5.17`, and require isolated compatibility spikes. | No dependency on undocumented package exports or human CLI text in UI code. |
 | OD-009 | Use a schema/capability gate. | Warn for unverified versions; block writes only when parse, preservation, validation, or safe round-trip cannot be demonstrated. |
 | OD-010 | Use portable/manual builds for private MVP; defer signed public updates. | Signing, update feeds, migration rollback, and downgrade behavior move to a later release phase. |
+| NOD-001 | Support both Copilot CLI and Copilot VS Code as separate MVP surfaces. | Separate discovery, capability, fixture, and binding behavior; no project-scope expansion. |
+| NOD-002 | Google Stitch for exploration, then shadcn/ui for production implementation. | Stitch output is not the maintained UI source of truth. |
+| NOD-003 | Instruction/rule support is read-only in MVP. | No instruction create, edit, sync, remove, conversion, or raw write. |
 
-## 5. Superseded option analysis and remaining open decisions
+## 5. Superseded option analysis
 
 OD-004, OD-009, and OD-010 are closed in section 4. Their option analysis is retained below as decision history; the former recommendations are now the selected directions.
 
@@ -121,12 +127,6 @@ Options:
 3. **Signed auto-update:** best long-term convenience, but requires update-feed integrity, interrupted-update recovery, database migration policy, and application downgrade behavior.
 
 **Current recommendation:** Use a portable or simple manual installer for private MVP testing. Before public release, require signed releases; add opt-in auto-update only after update rollback and SQLite migration behavior are tested.
-
-### Remaining open decisions
-
-- **NOD-001:** Which Copilot surface is writable first: CLI, VS Code, or both as separate capabilities?
-- **NOD-002:** Final UI delivery workflow. Current recommendation: explore variants with Google Stitch, then implement owned components with shadcn/ui.
-- **NOD-003:** Which global instruction/rule families enter the first vertical slice after sanitized fixtures are collected?
 
 ## 6. Assumptions requiring validation
 

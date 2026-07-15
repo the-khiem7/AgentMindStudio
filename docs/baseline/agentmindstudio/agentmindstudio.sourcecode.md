@@ -41,6 +41,8 @@ Responsibilities:
 
 - Window lifecycle, navigation, native dialogs, and update UI.
 - Dashboard, inventory, client detail, diff, sync plan, history, restore, and settings screens.
+- Use Google Stitch artifacts only to explore and approve flows; implement maintained production UI as owned shadcn/ui-based components.
+- Expose instruction/rule inventory and diff as read-only views in MVP, with no mutation action or Raw Config write path.
 - No direct filesystem mutation from presentation components.
 
 ### Application services
@@ -60,6 +62,7 @@ Responsibilities:
 - Expose verification range and migration rules.
 - Block writes when the adapter cannot safely parse, preserve, validate, or round-trip the observed configuration shape.
 - Declare harness surfaces and the resolved config sources consumed by each surface; deduplicate identical resolved paths without collapsing surface capabilities.
+- Register Copilot CLI and Copilot VS Code as distinct MVP surfaces with separate user/global sources and capability matrices.
 
 ### Platform ports
 
@@ -319,6 +322,8 @@ AgentMindStudio/
     application/
     adapters/
       copilot/
+        cli/
+        vscode/
       codex/
       kiro/
       kilo/

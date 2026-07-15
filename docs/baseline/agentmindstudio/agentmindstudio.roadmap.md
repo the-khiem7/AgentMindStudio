@@ -27,6 +27,9 @@ Tasks:
 - [ ] Collect sanitized fixtures for Copilot, Codex, Kiro, and Kilo global configuration and each MVP artifact type.
 - [x] Use a schema/capability gate for unknown client versions and block only unsafe or lossy writes.
 - [x] Establish the greenfield Project Nexus above feature baseline packs.
+- [x] Include Copilot CLI and Copilot VS Code as distinct MVP surfaces without expanding into project scope.
+- [x] Use Google Stitch for UI exploration and shadcn/ui for maintained production components.
+- [x] Keep instruction/rule support read-only in MVP.
 - [ ] Threat-model filesystem writes, package installation, MCP process tests, symlinks, and exported bundles.
 
 Exit criteria:
@@ -43,6 +46,8 @@ Exit criteria:
 Tasks:
 
 - [ ] Scaffold the ElectroBun application and Windows packaging.
+- [ ] Explore navigation, coverage, and diff variants in Google Stitch; record accepted flows rather than treating generated output as production source.
+- [ ] Initialize the production component system with shadcn/ui and implement accepted flows as owned components.
 - [ ] Define platform ports for filesystem roots, process execution, credential access, and packaging so a macOS implementation can be added later.
 - [ ] Implement the adapter registry and client detection service.
 - [ ] Implement bounded path discovery with custom-path overrides.
@@ -55,7 +60,7 @@ Tasks:
 
 Exit criteria:
 
-- The app detects Copilot, Codex, Kiro, and Kilo on a Windows test matrix.
+- The app detects Copilot CLI, Copilot VS Code, Codex, Kiro, and Kilo on a Windows test matrix.
 - A malformed configuration cannot crash the scan.
 - Every displayed item includes source path, scope, ownership, and adapter confidence.
 - Read-only mode performs no mutation, process launch, or package installation.
@@ -87,13 +92,13 @@ Exit criteria:
 
 ## Phase 3 — MVP client adapters
 
-**Goal:** Prove end-to-end inventory and manual synchronization for Copilot, Codex, Kiro, and Kilo.
+**Goal:** Prove end-to-end inventory and manual MCP/skill synchronization for Copilot CLI, Copilot VS Code, Codex, Kiro, and Kilo, with read-only instruction intelligence.
 
 Tasks:
 
-- [ ] Implement global/user MCP read/write adapters for the four clients.
-- [ ] Implement user-scope skill read/write adapters.
-- [ ] Implement instruction/rule inventory and only the conversions marked safe.
+- [ ] Implement global/user MCP read/write adapters for both Copilot surfaces and the other three harnesses.
+- [ ] Implement user-scope skill read/write adapters per supported surface capability.
+- [ ] Implement read-only instruction/rule inventory, activation/precedence analysis, coverage, and semantic diff.
 - [ ] Implement a coverage matrix that shows missing MCP, skill, and instruction bindings per client.
 - [ ] Separate portable MCP structure from per-client credential overrides in comparison and sync plans.
 - [ ] Implement enable/disable behavior where the target client supports it.
@@ -104,6 +109,7 @@ Tasks:
 Exit criteria:
 
 - A portable MCP definition and a portable skill can be synchronized among supported target combinations through the UI without replacing target credentials by default.
+- Instruction/rule sources expose no create, edit, sync, remove, conversion, or Raw Config write action in MVP.
 - Unsupported fields block or warn according to the compatibility contract.
 - Client-specific extensions survive round trips.
 - Rollback restores the exact pre-operation state.
