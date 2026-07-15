@@ -1,0 +1,159 @@
+﻿{
+    "schemaVersion":  1,
+    "package":  "skills",
+    "requestedVersion":  "1.5.17",
+    "executedAt":  "2026-07-15T13:41:10.0407699+07:00",
+    "isolatedHome":  true,
+    "status":  "pass",
+    "failureCount":  0,
+    "cases":  [
+                  {
+                      "name":  "binary-identity",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "--version"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  1692,
+                      "timeoutSeconds":  30,
+                      "output":  "1.5.17",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "root-help",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "--help"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  920,
+                      "timeoutSeconds":  30,
+                      "output":  "Usage: skills \u003ccommand\u003e [options]\n\nManage Skills:\n  add \u003cpackage\u003e        Add a skill package (alias: a)\n                       e.g. vercel-labs/agent-skills\n                            https://github.com/vercel-labs/agent-skills\n  use \u003cpackage\u003e@\u003cskill\u003e\n                       Generate a prompt for using one skill without installing it\n  remove [skills]      Remove installed skills\n  list, ls             List installed skills\n  find [query]         Search for skills interactively\n\nFind Options:\n  --owner \u003cowner\u003e        Search only repositories from a GitHub owner\n\nUpdates:\n  update [skills...]   Update skills to latest versions (alias: upgrade)\n\nUpdate Options:\n  -g, --global           Update global skills only\n  -p, --project          Update project skills only\n  -y, --yes              Skip scope prompt (auto-detect: project if in a project, else global)\n\nProject:\n  experimental_install Restore skills from skills-lock.json\n  init [name]          Initialize a skill (creates \u003cname\u003e/SKILL.md or ./SKILL.md)\n  experimental_sync    Sync skills from node_modules into agent directories\n\nAdd Options:\n  -g, --global           Install skill globally (user-level) instead of project-level\n  -a, --agent \u003cagents\u003e   Specify agents to install to (use \u0027*\u0027 for all agents)\n  -s, --skill \u003cskills\u003e   Specify skill names to install (use \u0027*\u0027 for all skills)\n  -l, --list             List available skills in the repository without installing\n  -y, --yes              Skip confirmation prompts\n  --copy                 Copy files instead of symlinking to agent directories\n  --metadata \u003cjson\u003e      Attach valid JSON to the install telemetry event\n  --subagent \u003cnames\u003e     Install to Eve subagents (use \u0027root\u0027 for the root agent)\n  --all                  Shorthand for --skill \u0027*\u0027 --agent \u0027*\u0027 -y\n  --full-depth           Search all subdirectories even when a root SKILL.md exists\n\nUse Options:\n  -s, --skill \u003cskill\u003e    Specify the skill to use\n  -a, --agent \u003cagent\u003e    Start one supported agent interactively\n  --full-depth           Search all subdirectories even when a root SKILL.md exists\n  --dangerously-accept-openclaw-risks\n                         Allow unverified OpenClaw community skills\n\nRemove Options:\n  -g, --global           Remove from global scope\n  -a, --agent \u003cagents\u003e   Remove from specific agents (use \u0027*\u0027 for all agents)\n  -s, --skill \u003cskills\u003e   Specify skills to remove (use \u0027*\u0027 for all skills)\n  -y, --yes              Skip confirmation prompts\n  --all                  Shorthand for --skill \u0027*\u0027 --agent \u0027*\u0027 -y\n  \nExperimental Sync Options:\n  -a, --agent \u003cagents\u003e   Specify agents to install to (use \u0027*\u0027 for all agents)\n  -y, --yes              Skip confirmation prompts\n\nList Options:\n  -g, --global           List global skills (default: project)\n  -a, --agent \u003cagents\u003e   Filter by specific agents\n  --json                 Output as JSON (machine-readable, no ANSI codes)\n\nOptions:\n  --help, -h        Show this help message\n  --version, -v     Show version number\n\nExamples:\n  $ skills add vercel-labs/agent-skills\n  $ skills use vercel-labs/agent-skills@vercel-optimize | claude\n  $ skills use vercel-labs/agent-skills --skill vercel-optimize --agent claude-code\n  $ skills add vercel-labs/agent-skills -g\n  $ skills add vercel-labs/agent-skills --agent claude-code cursor\n  $ skills add vercel-labs/agent-skills --skill pr-review commit\n  $ skills remove                        # interactive remove\n  $ skills remove web-design             # remove by name\n  $ skills rm --global frontend-design\n  $ skills list                          # list project skills\n  $ skills ls -g                         # list global skills\n  $ skills ls -a claude-code             # filter by agent\n  $ skills ls --json                      # JSON output\n  $ skills find                          # interactive search\n  $ skills find typescript               # search by keyword\n  $ skills find react --owner vercel     # search within an owner\n  $ skills update\n  $ skills update my-skill             # update a single skill\n  $ skills update -g                    # update global skills only\n  $ skills experimental_install            # restore from skills-lock.json\n  $ skills init my-skill\n  $ skills experimental_sync              # sync from node_modules\n  $ skills experimental_sync -y           # sync without prompts\n\nDiscover more skills at https://skills.sh/",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "list-empty-json",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "list",
+                                        "--json"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  973,
+                      "timeoutSeconds":  30,
+                      "output":  "[]",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "local-source-discovery",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "add",
+                                        "C:\\Users\\TheKhiem7\\AppData\\Local\\Temp\\agentmindstudio-skills-cli-spike\\ac6f68448090434784c2528857d78f8c\\fixture",
+                                        "--list"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  937,
+                      "timeoutSeconds":  30,
+                      "output":  "â”‚\nâ—   codex  Agent detected â€” installing non-interactively\nâ”‚\nâ—‡  Source: C:\\Users\\TheKhiem7\\AppData\\Local\\Temp\\agentmindstudio-skills-cli-spike\\ac6f68448090434784c2528857d78f8c\\fixture\nâ”‚\nâ—‡  Local path validated\nâ”‚\nâ—‡  Found 1 skill\n\nâ”‚\nâ—‡  Available Skills\nâ”‚\nâ”‚    spike-skill\nâ”‚\nâ”‚      Isolated local fixture used only by the AgentMindStudio skills CLI compatibility spike.\n\nâ”‚\nâ””  Use --skill \u003cname\u003e to install specific skills",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "project-install",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "add",
+                                        "C:\\Users\\TheKhiem7\\AppData\\Local\\Temp\\agentmindstudio-skills-cli-spike\\ac6f68448090434784c2528857d78f8c\\fixture",
+                                        "-a",
+                                        "codex",
+                                        "-s",
+                                        "spike-skill",
+                                        "--copy",
+                                        "-y"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  918,
+                      "timeoutSeconds":  30,
+                      "output":  "â”‚\nâ—   codex  Agent detected â€” installing non-interactively\nâ”‚\nâ—‡  Source: C:\\Users\\TheKhiem7\\AppData\\Local\\Temp\\agentmindstudio-skills-cli-spike\\ac6f68448090434784c2528857d78f8c\\fixture\nâ”‚\nâ—‡  Local path validated\nâ”‚\nâ—‡  Found 1 skill\nâ”‚\nâ—  Selected 1 skill: spike-skill\n\nâ”‚\nâ—‡  Installation Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â•®\nâ”‚                                â”‚\nâ”‚  .\\.agents\\skills\\spike-skill  â”‚\nâ”‚    copy â†’ Codex                â”‚\nâ”‚                                â”‚\nâ”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•¯\nâ”‚\nâ—‡  Installation complete\n\nâ”‚\nâ—‡  Installed 1 skill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•®\nâ”‚                                    â”‚\nâ”‚  âœ“ spike-skill (copied)            â”‚\nâ”‚    â†’ .\\.agents\\skills\\spike-skill  â”‚\nâ”‚                                    â”‚\nâ”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•¯\n\nâ”‚\nâ””  Done!  Review skills before use; they run with full agent permissions.",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "list-after-install-json",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "list",
+                                        "--json"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  1053,
+                      "timeoutSeconds":  30,
+                      "output":  "[\n  {\n    \"name\": \"spike-skill\",\n    \"path\": \"C:\\\\Users\\\\TheKhiem7\\\\AppData\\\\Local\\\\Temp\\\\agentmindstudio-skills-cli-spike\\\\ac6f68448090434784c2528857d78f8c\\\\project\\\\.agents\\\\skills\\\\spike-skill\",\n    \"scope\": \"project\",\n    \"agents\": []\n  }\n]",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "context-use",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "use",
+                                        "C:\\Users\\TheKhiem7\\AppData\\Local\\Temp\\agentmindstudio-skills-cli-spike\\ac6f68448090434784c2528857d78f8c\\fixture",
+                                        "--skill",
+                                        "spike-skill"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  1075,
+                      "timeoutSeconds":  30,
+                      "output":  "You are being given a Skill to execute for the user\u0027s next request.\n\nUse the following SKILL.md as your instructions:\n\n\u003cSKILL.md\u003e\n---\nname: spike-skill\ndescription: Isolated local fixture used only by the AgentMindStudio skills CLI compatibility spike.\n---\n\n# Spike fixture\n\nReturn the word `spike-ok` when invoked.\n\u003c/SKILL.md\u003e",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "project-remove",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "remove",
+                                        "spike-skill",
+                                        "-a",
+                                        "codex",
+                                        "-y"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  1025,
+                      "timeoutSeconds":  30,
+                      "output":  "â”‚\nâ—   codex  Agent detected â€” removing non-interactively\nâ”‚\nâ—‡  Found 1 unique installed skill(s)\nâ”‚\nâ—‡  Removal process complete\nâ”‚\nâ—†  Successfully removed 1 skill(s)\n\nâ”‚\nâ””  Done!",
+                      "parseError":  null,
+                      "assertionError":  null
+                  },
+                  {
+                      "name":  "invalid-command-contract",
+                      "status":  "pass",
+                      "arguments":  [
+                                        "definitely-not-a-command"
+                                    ],
+                      "expectedExitCode":  0,
+                      "exitCode":  0,
+                      "durationMs":  979,
+                      "timeoutSeconds":  30,
+                      "output":  "Unknown command: definitely-not-a-command\nRun skills --help for usage.",
+                      "parseError":  null,
+                      "assertionError":  null
+                  }
+              ],
+    "sandboxManifest":  [
+                            "fixture\\spike-skill\\SKILL.md",
+                            "project\\skills-lock.json"
+                        ]
+}
