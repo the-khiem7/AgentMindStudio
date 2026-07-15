@@ -1,0 +1,22 @@
+{
+  "name": "agentmindstudio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "electrobun build --env=dev",
+    "check": "bun run typecheck && bun test",
+    "start": "bun src/bun/index.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "verify:packaged": "bun scripts/verify-packaged.ts"
+  },
+  "dependencies": {
+    "electrobun": "1.18.1"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.8",
+    "@types/three": "0.185.1",
+    "typescript": "6.0.2"
+  }
+}
