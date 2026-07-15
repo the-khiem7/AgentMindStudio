@@ -36,7 +36,7 @@ Gate update protocol:
 | TG-002 | Is the adapter and capability contract precise enough for independent client adapters? | `passed` | Codex | Client-specific read/write adapter implementation | Nexus domain model | [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md), [contract proof](../../spikes/adapter-contract/README.md), [passing report](../../spikes/adapter-contract/runs/20260716-011900/results.json) |
 | TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `planned` | Unassigned | Discovery rules and fixture completion | None | Planned: `docs/spikes/client-surface-config/` and updated surface matrix |
 | TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `planned` | Unassigned | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | Planned: `fixtures/clients/` |
-| TG-005 | Does the first SQLite schema represent identities, bindings, observations, plans, audit, and recovery without storing secrets? | `planned` | Unassigned | Persistence-backed inventory and operation journal | TG-002; scaffold from TG-001 | Planned: `docs/adr/ADR-0002-sqlite-metadata-schema.md` and migration `0001` |
+| TG-005 | Does the first SQLite schema represent identities, bindings, observations, plans, audit, and recovery without storing secrets? | `passed` | Codex | Persistence-backed inventory and operation journal | TG-002; scaffold from TG-001 | [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md), [migration `0001`](../../../src/infrastructure/persistence/sqlite/migrations/0001_metadata.sql), [migration tests](../../../tests/persistence/migration.test.ts), [recovery tests](../../../tests/persistence/operation-journal.test.ts) |
 | TG-006 | Are filesystem, package, process, MCP, symlink, snapshot, log, and export threats understood and mitigated? | `planned` | Unassigned | Phase 2 mutation and every mutating skills workflow | TG-001, TG-002, TG-005 | Planned: `agentmindstudio.threat-model.md` |
 | TG-007 | Are navigation, Coverage, Diff, Apply, error, and read-only Instruction flows approved before production UI work? | `planned` | Unassigned | Production implementation of the corresponding UI flows | Closed product decisions | Planned: `docs/spikes/ui-exploration/` |
 | TG-008 | Is the pinned skills CLI behavior compatible with the guarded process gateway? | `passed` | Codex | `SkillCommandGateway` implementation for `skills@1.5.17` | None | [Spike](../../spikes/skills-cli/2026-07-15-skills-cli-1.5.17.md), [passing report](../../spikes/skills-cli/runs/20260715-134100/results.json) |
@@ -48,7 +48,7 @@ Gate update protocol:
 | Start technical spikes and ADR work | `ready` | Product decisions are closed. |
 | Commit to the ElectroBun production scaffold | `ready` | TG-001 passed with documented packaging/lifecycle limitations. |
 | Implement client-specific read adapters | `not ready` | TG-003 and TG-004; TG-002 is passed. |
-| Persist normalized inventory in SQLite | `not ready` | TG-005 |
+| Persist normalized inventory in SQLite | `ready for service implementation` | TG-005 passed; schema and operation journal are verified, while inventory repositories remain unimplemented. |
 | Implement production Dashboard/Coverage/Diff flows | `not ready` | TG-007 plus the relevant read services |
 | Enter Phase 2 mutation engine | `not ready` | Read-only foundation exit plus TG-006 |
 | Implement mutating skills workflows | `not ready` | TG-006 and mutation safeguards; TG-008 is already passed for the current pin |
@@ -287,6 +287,20 @@ Verification evidence: [Passing strict-compile and contract-proof report](../../
 Limitations: proof adapters use synthetic, secret-free native shapes; they establish the interface and capability invariants but do not verify production client paths, precedence, parser round trips, or write preservation, which remain TG-003/TG-004 work. TypeScript cannot prevent ambient side effects, so adapter purity remains a review and deterministic-test invariant.  
 Invalidation triggers confirmed: reopen when an MVP artifact or surface cannot be represented without breaking contract 1.0.0.  
 Affected roadmap/sourcecode sections: roadmap first action proceeds to TG-003; the technical baseline now references the accepted contract and keeps all production adapters proposed.
+
+### TG-005 completion — 2026-07-16
+
+Gate: TG-005  
+Previous state: `planned`  
+New state: `passed`  
+Reviewed at: 2026-07-16 02:23 Asia/Saigon  
+Owner: Codex  
+Environment/versions: Windows NT 10.0.22631 AMD64; ElectroBun 1.18.1; Bun 1.3.13; SQLite 3.51.2; TypeScript 6.0.2  
+Artifacts: [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md), [migration `0001`](../../../src/infrastructure/persistence/sqlite/migrations/0001_metadata.sql), [migration runner](../../../src/infrastructure/persistence/sqlite/migrations.ts), and [operation journal](../../../src/infrastructure/persistence/sqlite/operation-journal.ts)  
+Verification evidence: `bun run check` passed 12 tests with strict TypeScript; `bun run build` produced the ElectroBun Windows dev bundle; `bun run verify:packaged` launched that bundle against isolated application data and verified migration `{ version: 1, name: "metadata" }`. The migration suite covers clean/idempotent migration, representative metadata close/reopen, transaction rollback, absence of raw credential/snapshot-content columns, and shared-content deletion checks; the journal suite covers valid transitions and crash-state classification.  
+Limitations: inventory repositories and UI are not implemented; snapshot bytes, atomic writes, restore execution, and mutation recovery remain Phase 2 work blocked by TG-006 and the read-only vertical-slice exit; the packaged check verifies foundation initialization but not a production window lifecycle, installer execution, signing, or updates.  
+Invalidation triggers confirmed: reopen if identity, audit, recovery, profile, or deletion-safety requirements need unsafe ad hoc storage; SQLite/runtime replacement; or a proposal to persist raw credentials or snapshot content.  
+Affected roadmap/sourcecode sections: the roadmap now records the scaffold, Windows foundation ports, and TG-005 migration as implemented; the technical baseline distinguishes the verified persistence foundation from still-proposed adapters, inventory services, UI, and mutation infrastructure.
 
 ## 6. Gate completion record template
 

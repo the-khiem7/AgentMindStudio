@@ -1,7 +1,7 @@
 # AgentMindStudio — Delivery Roadmap
 
 **Baseline date:** 2026-07-15  
-**Current state:** No implementation exists; business baseline initialized.
+**Current state:** Foundation implementation exists: ElectroBun scaffold, Windows platform ports, SQLite migration `0001`, and operation-journal tests are verified. Client adapters/parsers, inventory services, UI, and mutation infrastructure remain unimplemented.
 
 **Authority:** This roadmap inherits product intent from the [Project Nexus](../../nexus/README.md).
 
@@ -56,16 +56,18 @@ Exit criteria:
 
 Tasks:
 
-- [ ] Scaffold the ElectroBun application and Windows packaging.
+- [x] Scaffold the ElectroBun application and verify the Windows dev package can initialize migration `0001` under isolated application data.
 - [ ] Explore navigation, coverage, and diff variants in Google Stitch; record accepted flows rather than treating generated output as production source.
 - [ ] Initialize the production component system with shadcn/ui and implement accepted flows as owned components.
-- [ ] Define platform ports for filesystem roots, process execution, credential access, and packaging so a macOS implementation can be added later.
+- [x] Define portable application-path, bounded-filesystem, and argument-array process ports with Windows implementations.
+- [ ] Add credential-store and release-packaging ports when a gated use case requires them; no credential storage or public distribution flow exists yet.
 - [ ] Implement the adapter registry and client detection service.
 - [ ] Implement discovery/read-only adapter slices for Copilot CLI, Copilot VS Code, Codex, Kiro, and Kilo using TG-002 through TG-004 evidence.
 - [ ] Implement bounded path discovery with custom-path overrides.
 - [ ] Implement parsers for JSON, JSONC, TOML, YAML/frontmatter, and Markdown.
 - [ ] Build the normalized inventory for clients, layers, artifacts, and bindings.
-- [ ] Complete TG-005, apply SQLite migration `0001`, and persist normalized inventory metadata without raw secrets or snapshot bytes.
+- [x] Complete TG-005 and apply SQLite migration `0001` for normalized inventory/operation metadata without raw secrets or snapshot bytes.
+- [ ] Implement inventory repositories/services that populate the verified schema from gated client observations.
 - [ ] Add redaction and sensitive-field classification.
 - [ ] Implement effective-layer and shadowing analysis.
 - [ ] Build dashboard, cross-client coverage matrix, client detail, artifact list, structured detail, and redacted raw views.
@@ -238,5 +240,7 @@ Exit criteria:
 Assign an owner and start TG-003 by producing one source/precedence evidence record per MVP surface under `docs/spikes/client-surface-config/`, then update the Nexus client-surface matrix from that evidence. Use the accepted [ADR-0001 adapter contract](../../adr/ADR-0001-adapter-capability-contract.md) and its capability vocabulary; do not treat the TG-002 proof paths or synthetic preservation claims as TG-003/TG-004 production evidence.
 
 TG-007 UI exploration may proceed independently in the same Wave 0. TG-002 now permits contract-shaped fixture design, but complete TG-004 capability claims only after TG-003 verifies source rules and each sanitized fixture proves the relevant parser/preservation behavior.
+
+The parallel foundation lane has completed the ElectroBun scaffold and TG-005 schema. This does not bypass the first action above: client-specific read code still waits for TG-003/TG-004, production UI waits for TG-007, and mutation/snapshot execution waits for TG-006 plus the Phase 1 read-only exit.
 
 The Phase 0 adapter proof may demonstrate discovery, normalization, comparison, and a side-effect-free dry-run. It must not implement real snapshot/write/rollback behavior; those capabilities begin only after TG-006 and the Phase 1 read-only exit permit entry into Phase 2.

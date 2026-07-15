@@ -1,11 +1,20 @@
-# AgentMindStudio — Proposed Technical Baseline
+# AgentMindStudio — Technical Baseline
 
 **Baseline date:** 2026-07-15  
-**Application implemented state:** None. The repository contains Nexus, baseline, ADR, and spike evidence, including the passed TG-001 ElectroBun foundation prototype and the passed TG-002 adapter-contract proof, but no production application source. Everything below remains proposed rather than implemented.
+**Application implemented state:** Foundation only. The repository now contains an ElectroBun `1.18.1` production scaffold, Windows-first application-path/bounded-filesystem/process ports, SQLite migration `0001`, an operation/crash-recovery journal, and repeatable tests. No production client adapter, parser, inventory repository/service, UI, snapshot writer, atomic mutation, or skills gateway is implemented.
 
 **Authority:** This technical baseline inherits product intent from the [Project Nexus](../../nexus/README.md).
 
-**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). TG-001 permits the ElectroBun scaffold and Windows platform-port commitment with its documented limitations. TG-002 approves adapter contract `1.0.0` for contract-shaped fixture and downstream design work, but it does not authorize production client adapters; those remain blocked by TG-003 and TG-004. Every production component below remains proposed until its own required gates pass and production code/tests exist.
+**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). TG-001 permitted the implemented ElectroBun scaffold and Windows platform-port foundation. TG-005 now verifies the metadata schema and operation journal described by [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md). TG-002 approves adapter contract `1.0.0`, but it does not authorize production client adapters; those remain blocked by TG-003 and TG-004. TG-006 still blocks mutation infrastructure, and TG-007 still blocks production UI flows.
+
+### Verified foundation boundary
+
+- `src/application/ports/` owns portable contracts for application paths, bounded filesystem access, and argument-array process execution.
+- `src/infrastructure/platform/windows/` implements those contracts using Windows/Bun primitives without introducing harness-specific behavior.
+- `src/infrastructure/persistence/sqlite/` owns the checksummed migration runner, metadata database lifecycle, and operation journal.
+- `src/domain/operations/` owns the runtime-independent operation-state transition rules.
+- The current ElectroBun entrypoint composes application-data initialization, migration, and clean shutdown only. Production windows/navigation remain TG-007 work.
+- No source under `src/` discovers, parses, normalizes, or writes a client configuration.
 
 ## 1. Architecture objective
 
@@ -26,11 +35,7 @@ flowchart LR
     REG --> KIRO["Kiro adapter"]
     REG --> KILO["Kilo adapter"]
     REG --> FUTURE["Future client adapters"]
-    COPILOT --> FS["Bounded platform filesystem and process ports"]
-    CODEX --> FS
-    KIRO --> FS
-    KILO --> FS
-    FUTURE --> FS
+    APP --> FS["Bounded platform filesystem and process ports"]
     SAFE --> META["Local metadata and snapshots"]
     INSTALL --> FS
 ```
@@ -121,10 +126,10 @@ Responsibilities:
 
 ### Metadata and snapshot store
 
-Proposed split:
+Implemented foundation split:
 
-- SQLite for client records, logical identities, bindings, file fingerprints, compatibility observations, plans, operation history, and optional profile membership.
-- Filesystem snapshot directory for original bytes and directory archives.
+- SQLite migration `0001` for installations/surfaces, sources/layers, logical identities, aliases, bindings, fingerprints, capability/schema evidence, observations, intentional differences, plans, operation history/recovery, affected paths, results, and snapshot indexes.
+- A resolved filesystem snapshot root is initialized by the scaffold, but snapshot writing, retention, restore, and archive bytes remain unimplemented Phase 2 work.
 - Secret values excluded from both unless a future dedicated secure-store feature is approved.
 
 SQLite is not a CRUD mirror of client configuration. Live client files remain authoritative:
@@ -133,7 +138,7 @@ SQLite is not a CRUD mirror of client configuration. Live client files remain au
 - **Audit** records an explicit AMS operation, affected paths, before/after hashes, outcome, and snapshot link so the operation can be explained or reversed.
 - **Profile data** is an optional post-MVP named selection of logical assets for reuse; it does not automatically enforce values onto clients.
 - **Relationship data** records aliases, provenance, bindings, intentional differences, and shared-content references that cannot be reconstructed reliably from current file bytes alone.
-- **Operation state** records planned, snapshotted, applying, verified, restored, and failed transitions so a crash can be diagnosed and recovered.
+- **Operation state** records planned, confirmed, snapshotting, applying, verifying, terminal, and recovery transitions so a crash can be diagnosed. Executing recovery remains Phase 2 work.
 
 ## 3. Approved adapter contract
 
@@ -166,7 +171,7 @@ Required guarantees:
 
 ## 4. Proposed normalized model
 
-This conceptual model is input to TG-005. It does not become the SQLite schema until the schema ADR, migration `0001`, and migration/recovery tests pass.
+This conceptual model is now represented by the normalized tables in [migration `0001`](../../../src/infrastructure/persistence/sqlite/migrations/0001_metadata.sql) and governed by [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md). The model remains broader than implemented application services: the schema can persist these relationships, but client discovery and inventory repositories do not yet populate them.
 
 ### ClientInstallation
 
@@ -314,42 +319,38 @@ sequenceDiagram
 - Separate “connection test” from “save configuration”; neither implies the other.
 - Route advanced Raw Config edits through parse, diff, snapshot, atomic write, and post-write validation; the raw editor is not a filesystem bypass.
 
-## 8. Suggested repository layout
+## 8. Current repository layout
 
-This layout is illustrative and should be adapted to ElectroBun's actual project conventions during scaffolding:
+The greenfield scaffold uses a single package until independently deployable packages justify a workspace split:
 
 ```text
 AgentMindStudio/
-  apps/
-    desktop/
-      ui/
-      native/
-  packages/
+  src/
+    bun/
+      index.ts
     domain/
+      operations/
     application/
-    adapters/
-      copilot/
-        cli/
-        vscode/
-      codex/
-      kiro/
-      kilo/
-      future/
-    config-formats/
-    transaction/
-    skill-installer/
-    persistence/
+      ports/
+    infrastructure/
+      persistence/sqlite/
+        migrations/0001_metadata.sql
+      platform/windows/
+  scripts/
+    verify-packaged.ts
   fixtures/
     clients/
   tests/
-    compatibility/
-    roundtrip/
-    failure-injection/
+    persistence/
+    platform/
   docs/
     nexus/
     baseline/
+    adr/
     spikes/
 ```
+
+`fixtures/clients/` remains TG-004 work and is not populated by this lane. Adapter, UI, transaction/snapshot, and skill-gateway directories should be added only when their gates permit implementation.
 
 ## 9. Required test strategy
 
