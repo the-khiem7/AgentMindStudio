@@ -64,10 +64,12 @@ Before planning or implementing a workstream:
 
 1. Read `docs/nexus/README.md` and the directly relevant Nexus documents.
 2. Locate or create the bounded baseline pack for the workstream.
-3. Identify open decisions, rejected assumptions, scope boundaries, and required evidence.
-4. Create an ADR or repeatable spike only when the choice or uncertainty warrants it.
-5. Implement and verify against explicit acceptance behavior.
-6. Synchronize the baseline with actual code state and propagate any newly closed decisions.
+3. Identify open decisions, rejected assumptions, scope boundaries, required evidence, and any technical-gate register in the baseline pack.
+4. Treat that register as the single owner of gate status. Do not duplicate live gate status in roadmaps, ADRs, or spike reports.
+5. Before crossing a gate boundary, verify that its required artifacts exist, evidence links resolve, pass conditions are met, and invalidation triggers have not occurred.
+6. Create an ADR or repeatable spike only when the choice or uncertainty warrants it, then update the related gate with the resulting evidence.
+7. Implement and verify against explicit acceptance behavior.
+8. Synchronize the baseline with actual code state and propagate any newly closed decisions or gate-state changes.
 
 For a greenfield capability, establish or amend Nexus intent before creating implementation baselines. For ongoing or brownfield work, use baseline packs to track reality and drift without duplicating the entire Nexus.
 

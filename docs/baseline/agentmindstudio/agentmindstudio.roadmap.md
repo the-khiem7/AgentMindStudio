@@ -11,6 +11,18 @@
 - “Supported” means discover, parse, validate, plan, write, re-read, and restore; reading a file alone is not write support.
 - All mutating work must preserve the safety rules in the product requirements.
 
+## Technical readiness tracking
+
+The canonical status, dependencies, artifacts, evidence, pass conditions, and invalidation triggers for technical gates live in [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). This roadmap references gate IDs but does not duplicate their status.
+
+Entry boundaries:
+
+- Phase 0 exits when TG-001 through TG-004 pass.
+- Phase 1 persistence-backed inventory requires TG-005.
+- Phase 1 production Dashboard/Coverage/Diff UI requires TG-007.
+- Phase 2 cannot begin until the read-only vertical slice exits and TG-006 passes.
+- Mutating skills workflows additionally require TG-008 and Phase 2 safeguards; current TG-008 status is read only from the technical-gate register.
+
 ## Phase 0 — Decision gates and compatibility fixtures
 
 **Goal:** Remove the decisions that could force a redesign before UI implementation.
@@ -23,19 +35,18 @@ Tasks:
 - [x] Wrap the official `skills` CLI behind `SkillCommandGateway`, pinned to `1.5.17`; do not depend on undocumented library imports.
 - [x] Create and run an isolated repeatable compatibility spike for the pinned skills runner.
 - [x] Restrict product scope to global/user configuration; do not scan or manage project layers.
-- [ ] Define the adapter capability and compatibility contracts.
-- [ ] Collect sanitized fixtures for Copilot, Codex, Kiro, and Kilo global configuration and each MVP artifact type.
 - [x] Use a schema/capability gate for unknown client versions and block only unsafe or lossy writes.
 - [x] Establish the greenfield Project Nexus above feature baseline packs.
 - [x] Include Copilot CLI and Copilot VS Code as distinct MVP surfaces without expanding into project scope.
 - [x] Use Google Stitch for UI exploration and shadcn/ui for maintained production components.
 - [x] Keep instruction/rule support read-only in MVP.
-- [ ] Threat-model filesystem writes, package installation, MCP process tests, symlinks, and exported bundles.
+- Execute and update TG-001 through TG-004 only in the technical-gate register; do not maintain duplicate gate checkboxes here.
 
 Exit criteria:
 
-- Adapter interface and compatibility states are approved.
-- At least one fixture exists for every named client.
+- TG-001 through TG-004 satisfy their registered pass conditions with resolving evidence links.
+- Adapter interface and compatibility states are approved through TG-002.
+- At least one valid and one failure fixture exists for every named MVP surface/artifact read capability through TG-004.
 - Secret and snapshot policies are documented.
 - No unresolved decision can change the core storage or transaction model.
 
@@ -50,9 +61,11 @@ Tasks:
 - [ ] Initialize the production component system with shadcn/ui and implement accepted flows as owned components.
 - [ ] Define platform ports for filesystem roots, process execution, credential access, and packaging so a macOS implementation can be added later.
 - [ ] Implement the adapter registry and client detection service.
+- [ ] Implement discovery/read-only adapter slices for Copilot CLI, Copilot VS Code, Codex, Kiro, and Kilo using TG-002 through TG-004 evidence.
 - [ ] Implement bounded path discovery with custom-path overrides.
 - [ ] Implement parsers for JSON, JSONC, TOML, YAML/frontmatter, and Markdown.
 - [ ] Build the normalized inventory for clients, layers, artifacts, and bindings.
+- [ ] Complete TG-005, apply SQLite migration `0001`, and persist normalized inventory metadata without raw secrets or snapshot bytes.
 - [ ] Add redaction and sensitive-field classification.
 - [ ] Implement effective-layer and shadowing analysis.
 - [ ] Build dashboard, cross-client coverage matrix, client detail, artifact list, structured detail, and redacted raw views.
@@ -60,6 +73,7 @@ Tasks:
 
 Exit criteria:
 
+- TG-005 and TG-007 satisfy their registered pass conditions with resolving evidence links.
 - The app detects Copilot CLI, Copilot VS Code, Codex, Kiro, and Kilo on a Windows test matrix.
 - A malformed configuration cannot crash the scan.
 - Every displayed item includes source path, scope, ownership, and adapter confidence.
@@ -68,6 +82,8 @@ Exit criteria:
 ## Phase 2 — Safe mutation engine
 
 **Goal:** Establish transactional writes before implementing broad synchronization.
+
+Entry criteria: the Phase 1 read-only vertical slice is complete and TG-006 satisfies its registered pass conditions.
 
 Tasks:
 
@@ -90,15 +106,15 @@ Exit criteria:
 - Injected failures leave the original configuration intact or automatically restored.
 - Reapplying an applied plan yields no additional changes.
 
-## Phase 3 — MVP client adapters
+## Phase 3 — MVP writable client adapters
 
 **Goal:** Prove end-to-end inventory and manual MCP/skill synchronization for Copilot CLI, Copilot VS Code, Codex, Kiro, and Kilo, with read-only instruction intelligence.
 
 Tasks:
 
-- [ ] Implement global/user MCP read/write adapters for both Copilot surfaces and the other three harnesses.
-- [ ] Implement user-scope skill read/write adapters per supported surface capability.
-- [ ] Implement read-only instruction/rule inventory, activation/precedence analysis, coverage, and semantic diff.
+- [ ] Extend the Phase 1 read adapters with global/user MCP write capabilities for both Copilot surfaces and the other three harnesses.
+- [ ] Extend supported user-scope skill adapters with write capabilities per surface capability matrix.
+- [ ] Preserve the Phase 1 read-only instruction/rule inventory, activation/precedence analysis, coverage, and semantic diff without adding mutation.
 - [ ] Implement a coverage matrix that shows missing MCP, skill, and instruction bindings per client.
 - [ ] Separate portable MCP structure from per-client credential overrides in comparison and sync plans.
 - [ ] Implement enable/disable behavior where the target client supports it.
@@ -219,15 +235,11 @@ Exit criteria:
 
 ## First next action
 
-Create an adapter spike for Codex and Kilo using sanitized global fixtures. These two clients exercise different formats and Kilo's split configuration roots. The spike must demonstrate:
+Start Wave 0 from the [technical-gate register](agentmindstudio.technical-gates.md):
 
-1. layer discovery,
-2. normalized MCP and skill models,
-3. a field-level dry-run between the two formats,
-4. snapshot and rollback,
-5. secret redaction,
-6. preservation of unknown client-specific fields,
-7. intentional per-client MCP credential overrides,
-8. extensibility for Copilot and Kiro without changing the core model.
+1. Assign an owner and start TG-001, the ElectroBun foundation spike.
+2. In parallel, start TG-002 for the adapter/capability ADR and TG-003 for surface source/precedence evidence.
+3. TG-007 UI exploration may run in parallel because it does not authorize production UI implementation.
+4. Start TG-004 fixture completion only after TG-002 defines expected normalized contracts and TG-003 verifies source rules.
 
-Do not start with the full settings UI; the adapter and transaction spike is the highest-risk proof.
+The Phase 0 adapter proof may demonstrate discovery, normalization, comparison, and a side-effect-free dry-run. It must not implement real snapshot/write/rollback behavior; those capabilities begin only after TG-006 and the Phase 1 read-only exit permit entry into Phase 2.

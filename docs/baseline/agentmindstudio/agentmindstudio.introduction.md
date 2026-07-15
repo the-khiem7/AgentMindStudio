@@ -6,6 +6,8 @@
 
 **Authority:** This execution baseline inherits product intent from the [Project Nexus](../../nexus/README.md).
 
+**Technical readiness:** Current gates, blockers, artifacts, and evidence are tracked in [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md).
+
 ## 1. Executive summary
 
 AgentMindStudio is a local-first control plane for discovering, understanding, managing, and synchronizing AI-development customizations across multiple AI clients.

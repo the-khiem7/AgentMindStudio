@@ -5,6 +5,8 @@
 
 **Authority:** This planned behavior inherits product intent from the [Project Nexus](../../nexus/README.md).
 
+**Technical readiness:** These journeys remain planned until their prerequisite gates in [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md) and the corresponding implementation tests pass.
+
 ## 1. First launch
 
 ### Intended flow

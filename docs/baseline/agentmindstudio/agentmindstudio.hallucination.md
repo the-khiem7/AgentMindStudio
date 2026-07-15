@@ -5,6 +5,8 @@
 
 **Authority:** This evidence log inherits product intent from the [Project Nexus](../../nexus/README.md).
 
+**Technical readiness:** Assumption-validation work must update the relevant gate and evidence link in [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md).
+
 ## 1. Confirmed decisions
 
 These statements come directly from the product request and can be treated as current decisions:
@@ -134,12 +136,12 @@ Options:
 |---|---|---|---|
 | A-001 | All initial users operate as one Windows user with access to their own global configuration paths. | Pilot interviews and permission tests. | Requires elevation or multi-user architecture. |
 | A-002 | Most valuable portable assets are MCP, skills, and instructions. | Inventory current users and rank migration pain. | MVP targets the wrong asset mix. |
-| A-003 | Client configuration can be safely round-tripped with available parsers. | Golden-file fixture tests including comments and unknown fields. | Writes damage hand-maintained files. |
+| A-003 | Client configuration can be safely round-tripped with available parsers. | TG-003 source evidence plus TG-004 golden fixtures, including comments and unknown fields. | Writes damage hand-maintained files. |
 | A-004 | Manual reviewed operations are sufficient for MVP. | Prototype usability tests. | Auto-sync may need earlier prioritization. |
 | A-005 | The pinned skills CLI remains usable behind guarded semantic checks despite incomplete structured output. | Repeat the project-scoped isolated spike for every candidate version and wrapper change. | Freeze upgrades or replace the backend. |
 | A-006 | Client versions can be detected reliably. | Compare executable, extension, package, and config markers. | Compatibility status becomes misleading. |
-| A-007 | Secret fields can be identified without resolving their values. | Test real sanitized MCP configs and false positives. | Export or diagnostics may leak secrets. |
-| A-008 | ElectroBun supports the required filesystem, process, signing, and update flows on Windows. | Early packaging and process-runner spike. | Framework change or native helper required. |
+| A-007 | Secret fields can be identified without resolving their values. | TG-004 sanitized fixture tests plus TG-006 threat-model security cases. | Export or diagnostics may leak secrets. |
+| A-008 | ElectroBun supports the required filesystem, process, SQLite, packaging, signing, and update flows on Windows. | TG-001 packaged foundation spike. | Framework change or native helper required. |
 
 ## 7. Rejected assumptions
 

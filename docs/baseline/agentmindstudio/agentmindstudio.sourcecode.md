@@ -5,6 +5,8 @@
 
 **Authority:** This technical baseline inherits product intent from the [Project Nexus](../../nexus/README.md).
 
+**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). Components below are proposed until their required gate passes and code/tests exist.
+
 ## 1. Architecture objective
 
 Keep client-specific knowledge at the boundary. The core application should reason about normalized assets, scopes, compatibility, plans, and transactions without knowing whether the target file is JSONC, TOML, YAML, Markdown, or a directory tree.
@@ -135,6 +137,8 @@ SQLite is not a CRUD mirror of client configuration. Live client files remain au
 
 ## 3. Proposed adapter contract
 
+This section is design input to TG-002, not an approved implementation contract. TG-002 must produce the ADR, versioned TypeScript interface, capability schema, and proof adapters before client-specific adapter implementation begins.
+
 An adapter should provide behavior equivalent to:
 
 ```text
@@ -160,6 +164,8 @@ Required guarantees:
 - Adapter errors are structured; raw secret-bearing source is not included in generic logs.
 
 ## 4. Proposed normalized model
+
+This conceptual model is input to TG-005. It does not become the SQLite schema until the schema ADR, migration `0001`, and migration/recovery tests pass.
 
 ### ClientInstallation
 
@@ -348,6 +354,7 @@ AgentMindStudio/
 
 ### Adapter golden tests
 
+- Consume only TG-004 fixtures whose manifests and secret scans pass.
 - Parse sanitized real-world fixtures.
 - Normalize expected artifacts.
 - Render after targeted changes.

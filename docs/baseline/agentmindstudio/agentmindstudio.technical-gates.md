@@ -1,0 +1,279 @@
+# AgentMindStudio — Technical Readiness Gates
+
+**Baseline date:** 2026-07-15  
+**Purpose:** Canonical self-tracking register for technical evidence required before implementation crosses a safety or architecture boundary.  
+**Authority:** Product intent comes from the [Project Nexus](../../nexus/README.md); this register owns technical-gate status for the AgentMindStudio baseline pack.
+
+## 1. Tracking rules
+
+This file is the single source of truth for gate status. Roadmap, ADR, spike, and code documents may reference a gate ID but must not maintain a competing status.
+
+Allowed states:
+
+| State | Meaning |
+|---|---|
+| `planned` | Required work is defined but has not started. |
+| `in_progress` | An owner is actively producing the required artifacts or evidence. |
+| `blocked` | Progress requires an explicit dependency, user decision, or external change. |
+| `passed` | Every pass condition is met and linked evidence exists. |
+| `failed` | Evidence disproved the expected technical direction; open an ADR or product decision before continuing. |
+| `superseded` | Another gate or approved direction replaced this gate; link the replacement. |
+
+Gate update protocol:
+
+1. Set `in_progress`, owner, and review date before beginning work.
+2. Create artifacts only in the locations declared by the gate, or update the gate before using another location.
+3. Record exact environment, dependency versions, fixtures, commands, and limitations in spike evidence.
+4. Mark `passed` only when all pass conditions are satisfied and evidence links resolve.
+5. Reopen a passed gate when its listed invalidation trigger occurs.
+6. If a gate fails, stop the blocked implementation path; record the result and create the necessary ADR or Nexus OpenDecision.
+
+## 2. Gate dashboard
+
+| Gate | Technical question | Status | Owner | Blocks | Dependencies | Evidence |
+|---|---|---|---|---|---|---|
+| TG-001 | Can ElectroBun safely provide the required Windows filesystem, process, SQLite, and packaging primitives? | `planned` | Unassigned | Production scaffold and platform-port commitment | None | Planned: `docs/spikes/electrobun-foundation/` |
+| TG-002 | Is the adapter and capability contract precise enough for independent client adapters? | `planned` | Unassigned | Client-specific read/write adapter implementation | Nexus domain model | Planned: `docs/adr/ADR-0001-adapter-capability-contract.md` |
+| TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `planned` | Unassigned | Discovery rules and fixture completion | None | Planned: `docs/spikes/client-surface-config/` and updated surface matrix |
+| TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `planned` | Unassigned | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | Planned: `fixtures/clients/` |
+| TG-005 | Does the first SQLite schema represent identities, bindings, observations, plans, audit, and recovery without storing secrets? | `planned` | Unassigned | Persistence-backed inventory and operation journal | TG-002; scaffold from TG-001 | Planned: `docs/adr/ADR-0002-sqlite-metadata-schema.md` and migration `0001` |
+| TG-006 | Are filesystem, package, process, MCP, symlink, snapshot, log, and export threats understood and mitigated? | `planned` | Unassigned | Phase 2 mutation and every mutating skills workflow | TG-001, TG-002, TG-005 | Planned: `agentmindstudio.threat-model.md` |
+| TG-007 | Are navigation, Coverage, Diff, Apply, error, and read-only Instruction flows approved before production UI work? | `planned` | Unassigned | Production implementation of the corresponding UI flows | Closed product decisions | Planned: `docs/spikes/ui-exploration/` |
+| TG-008 | Is the pinned skills CLI behavior compatible with the guarded process gateway? | `passed` | Codex | `SkillCommandGateway` implementation for `skills@1.5.17` | None | [Spike](../../spikes/skills-cli/2026-07-15-skills-cli-1.5.17.md), [passing report](../../spikes/skills-cli/runs/20260715-134100/results.json) |
+
+## 3. Current readiness
+
+| Boundary | Readiness | Required gates |
+|---|---|---|
+| Start technical spikes and ADR work | `ready` | Product decisions are closed. |
+| Commit to the ElectroBun production scaffold | `not ready` | TG-001 |
+| Implement client-specific read adapters | `not ready` | TG-002, TG-003, TG-004 |
+| Persist normalized inventory in SQLite | `not ready` | TG-005 |
+| Implement production Dashboard/Coverage/Diff flows | `not ready` | TG-007 plus the relevant read services |
+| Enter Phase 2 mutation engine | `not ready` | Read-only foundation exit plus TG-006 |
+| Implement mutating skills workflows | `not ready` | TG-006 and mutation safeguards; TG-008 is already passed for the current pin |
+| Implement MCP/skill write adapters and synchronization | `not ready` | Phase 2 exit plus adapter-specific write fixtures |
+
+## 4. Canonical dependency plan
+
+```mermaid
+flowchart TD
+    TG1["TG-001 ElectroBun foundation"] --> SCAFFOLD["Production scaffold and platform ports"]
+    TG2["TG-002 Adapter contract"] --> TG4["TG-004 Sanitized fixtures"]
+    TG3["TG-003 Surface source evidence"] --> TG4
+    TG2 --> READ["Discovery and read adapters"]
+    TG3 --> READ
+    TG4 --> READ
+    TG1 --> TG5["TG-005 SQLite schema and migration"]
+    TG2 --> TG5
+    TG5 --> INVENTORY["Persistent normalized inventory"]
+    TG7["TG-007 Stitch UX contract"] --> UI["Owned shadcn/ui screens"]
+    SCAFFOLD --> READ
+    READ --> RO["Read-only vertical slice exit"]
+    INVENTORY --> RO
+    UI --> RO
+    TG1 --> TG6["TG-006 Threat model"]
+    TG2 --> TG6
+    TG5 --> TG6
+    TG6 --> MUTATION["Phase 2 mutation engine"]
+    RO --> MUTATION
+    MUTATION --> WRITE["MCP and skill write adapters"]
+    WRITE --> SYNC["Reviewed cross-client synchronization"]
+    TG8["TG-008 skills CLI contract"] --> SKILLS["Skills command gateway"]
+    TG6 --> SKILLS
+    MUTATION --> SKILLS
+```
+
+### Execution waves
+
+1. **Wave 0 — Parallel evidence:** start TG-001, TG-002, TG-003, and TG-007. None of these requires product implementation writes.
+2. **Wave 1 — Read-only foundation:** after TG-001, create the scaffold and platform ports. Complete TG-004 and TG-005, then implement discovery/read adapters, persistent inventory, and the approved shadcn/ui read flows.
+3. **Wave 2 — Mutation safety:** complete TG-006 and the read-only vertical slice, then implement snapshots, fingerprints, transaction state, atomic writes, verification, and recovery.
+4. **Wave 3 — Writable capabilities:** implement MCP/skill write adapters and reviewed synchronization. Implement mutating skills workflows only with TG-008 plus Phase 2 safeguards.
+
+Instruction/rule behavior remains read-only through every MVP wave.
+
+## 5. Gate contracts
+
+### TG-001 — ElectroBun foundation spike
+
+Required artifacts:
+
+- Spike report under `docs/spikes/electrobun-foundation/` with exact ElectroBun, Bun, Windows, and SQLite versions.
+- Minimal disposable prototype or repeatable scripts used by the spike.
+- Recommendation: direct implementation, native helper, or framework reconsideration.
+
+Required verification:
+
+- Bounded file read/write in paths containing spaces and Unicode.
+- Temporary write plus atomic replacement, lock/error behavior, and cleanup.
+- Argument-array child process execution with separate stdout/stderr, timeout, cancellation, exit code, and sanitized environment.
+- SQLite open, migration, transaction rollback, close/reopen, and failure behavior.
+- Packaged Windows build performing the same operations without elevation.
+
+Pass condition: every required primitive works in a packaged build, or an explicitly approved platform-port fallback covers the gap without changing Nexus scope.
+
+Invalidation: ElectroBun/Bun major upgrade, packaging/runtime replacement, or a newly required native primitive.
+
+### TG-002 — Adapter and capability contract
+
+Required artifacts:
+
+- `docs/adr/ADR-0001-adapter-capability-contract.md`.
+- Versioned TypeScript contract or compileable spike interface.
+- Capability schema covering harness, surface, artifact, scope, read, write, test, reload, preservation, and version confidence.
+- Structured adapter error taxonomy with no raw secret-bearing source in generic errors.
+
+Required verification:
+
+- Codex and Kilo proof adapters compile against the same contract without core conditionals.
+- Discovery/read/normalize/compare methods are side-effect free.
+- Write capabilities are explicit per surface, artifact, scope, and verified schema.
+- Instruction capabilities are read-only for MVP.
+
+Pass condition: ADR accepted, contracts compile, and the two proof adapters demonstrate extension to the other MVP surfaces without changing the core model.
+
+Invalidation: a new MVP artifact or surface cannot be represented without breaking the contract.
+
+### TG-003 — Surface source and precedence verification
+
+Required artifacts:
+
+- One evidence record per MVP surface under `docs/spikes/client-surface-config/`.
+- Updated [client surface matrix](../../nexus/client-surface-matrix.md).
+- A machine-readable or tabular matrix for each surface × MCP/Skill/Instruction combination.
+
+Each record must identify:
+
+- resolved user/global path or discovery rule;
+- format and schema/version signal;
+- precedence, ownership, and writability;
+- whether multiple surfaces share the resolved source;
+- reload/restart behavior;
+- official evidence plus sanitized local verification;
+- unsupported or unknown fields.
+
+Pass condition: Copilot CLI, Copilot VS Code, Codex, Kiro, and Kilo have evidence for every MVP artifact class, with unknowns explicitly classified rather than guessed.
+
+Invalidation: client version changes a path, format, precedence rule, or supported capability.
+
+### TG-004 — Sanitized fixture pack
+
+Required artifacts:
+
+- `fixtures/clients/<surface>/<artifact>/` fixture sets.
+- A manifest containing provenance category, sanitization date, source version, expected parse state, and expected normalized output.
+- Automated secret scan and redaction review result.
+
+Minimum cases where the format supports them:
+
+- empty/minimal source;
+- representative valid source;
+- malformed source;
+- comments and formatting preservation;
+- unknown client-specific fields;
+- duplicate/shadowed definitions;
+- same-name/different-endpoint MCP conflict;
+- different-name/same-endpoint alias;
+- per-client credential-binding difference;
+- read-only instruction activation/precedence variants.
+
+Pass condition: every read capability has positive and failure fixtures, no real secret remains, expected normalized outputs exist, and golden tests can consume the pack.
+
+Invalidation: adapter support expands to a new schema, path, surface, or artifact behavior.
+
+### TG-005 — SQLite metadata schema and first migration
+
+Required artifacts:
+
+- `docs/adr/ADR-0002-sqlite-metadata-schema.md` with ERD and trade-offs.
+- Migration `0001` plus migration smoke tests.
+- Documented operation-state and crash-recovery transitions.
+
+The schema must cover:
+
+- harness installations, surfaces, sources, and layers;
+- logical assets, aliases, bindings, observations, and content fingerprints;
+- capability/schema evidence and intentional-difference state;
+- sync plans, operations, affected paths, hashes, results, and snapshot indexes;
+- schema version and migration history;
+- reference checks required before shared-content deletion.
+
+Pass condition: a clean database migrates, closes, reopens, preserves representative fixture metadata, rolls back a failed transaction, and contains no raw credential values or snapshot content.
+
+Invalidation: normalized identity, audit, recovery, or profile requirements cannot be represented without unsafe ad hoc storage.
+
+### TG-006 — Security threat model
+
+Required artifacts:
+
+- `agentmindstudio.threat-model.md` in this baseline pack.
+- Trust-boundary diagram, threat register, mitigations, residual risks, and security test mapping.
+
+Required scope:
+
+- bounded filesystem reads/writes, traversal, symlinks, junctions, and locks;
+- downloaded skill repositories, executable content, and supply-chain provenance;
+- child processes, arguments, environment, timeouts, cancellation, and output limits;
+- MCP command/network tests and secret dependencies;
+- SQLite metadata, filesystem snapshots, logs, diagnostics, and exports;
+- rollback failure, partial operations, and external file changes.
+
+Pass condition: no unresolved critical/high risk blocks the intended operation; every accepted material risk has an owner, rationale, mitigation, and verification test.
+
+Invalidation: a new mutating capability, external execution boundary, secret-storage feature, or distribution channel is introduced.
+
+### TG-007 — Stitch UX contract
+
+Required artifacts:
+
+- Exploration record and accepted screenshots/exports under `docs/spikes/ui-exploration/`.
+- Flow-level acceptance notes and a shadcn/ui component mapping.
+- Accessibility review for keyboard navigation, focus order, non-color state indicators, and redacted values.
+
+Required flows:
+
+- first-run discovery and surface/layer health;
+- unified inventory and Coverage matrix;
+- same-name/different-endpoint conflict;
+- different-name/same-endpoint alias linking;
+- raw plus semantic Diff;
+- Apply drawer with exact paths, preserved credentials, snapshot, and rollback;
+- skills CLI incompatibility/error state;
+- read-only Instruction comparison with no mutation affordance.
+
+Pass condition: accepted prototypes cover every required flow, decisions are recorded, and each production screen maps to owned shadcn/ui components rather than generated source ownership.
+
+Invalidation: a product flow, navigation model, or core interaction invariant changes.
+
+### TG-008 — Pinned skills CLI compatibility
+
+Current pin: `skills@1.5.17`.
+
+Current evidence:
+
+- [Integration spike](../../spikes/skills-cli/2026-07-15-skills-cli-1.5.17.md)
+- [Passing timeout-guarded report](../../spikes/skills-cli/runs/20260715-134100/results.json)
+- [Repeatable project-scoped skill](../../../.agents/skills/spike-skills-cli/SKILL.md)
+
+Pass condition: exact version, command discovery, JSON inventory, local discovery, isolated install/use/remove, timeout handling, and known non-zero/zero-exit anomalies match the guarded contract.
+
+Invalidation: package pin, invocation method, expected output shape, supported command set, Node/npm runtime, or gateway contract changes.
+
+## 6. Gate completion record template
+
+Append a completion entry when a gate changes to `passed`, `failed`, or `superseded`:
+
+```text
+Gate:
+Previous state:
+New state:
+Reviewed at:
+Owner:
+Environment/versions:
+Artifacts:
+Verification evidence:
+Limitations:
+Invalidation triggers confirmed:
+Affected roadmap/sourcecode sections:
+```
