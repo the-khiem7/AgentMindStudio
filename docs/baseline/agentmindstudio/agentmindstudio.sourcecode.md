@@ -13,18 +13,20 @@ flowchart LR
     APP --> INV["Inventory service"]
     APP --> PLAN["Sync planner"]
     APP --> SAFE["Transaction and snapshot service"]
-    APP --> INSTALL["Skill installer"]
+    APP --> INSTALL["Skill command gateway"]
     INV --> REG["Adapter registry"]
     PLAN --> REG
     SAFE --> REG
+    REG --> COPILOT["Copilot adapter"]
     REG --> CODEX["Codex adapter"]
-    REG --> CLAUDE["Claude Code adapter"]
-    REG --> CURSOR["Cursor adapter"]
-    REG --> OTHER["Kiro, Kilo, Cline, Copilot adapters"]
-    CODEX --> FS["Bounded filesystem and process ports"]
-    CLAUDE --> FS
-    CURSOR --> FS
-    OTHER --> FS
+    REG --> KIRO["Kiro adapter"]
+    REG --> KILO["Kilo adapter"]
+    REG --> FUTURE["Future client adapters"]
+    COPILOT --> FS["Bounded platform filesystem and process ports"]
+    CODEX --> FS
+    KIRO --> FS
+    KILO --> FS
+    FUTURE --> FS
     SAFE --> META["Local metadata and snapshots"]
     INSTALL --> FS
 ```
@@ -54,7 +56,16 @@ Responsibilities:
 - Select an adapter by client identity and version.
 - Declare read/write capabilities per artifact type and scope.
 - Expose verification range and migration rules.
-- Prevent an unverified adapter from writing by default.
+- Block writes when the adapter cannot safely parse, preserve, validate, or round-trip the observed configuration shape.
+
+### Platform ports
+
+Responsibilities:
+
+- Resolve global configuration roots without leaking Windows path assumptions into the domain.
+- Provide argument-safe process execution, filesystem locking, atomic replacement, and optional credential-store access.
+- Implement Windows first while keeping contracts implementable for macOS later.
+- Never provide a recursive drive or project scanner.
 
 ### Inventory service
 
@@ -64,6 +75,7 @@ Responsibilities:
 - Parse layers without mutating them.
 - Normalize artifacts and compute logical identity candidates.
 - Report shadowing, malformed sources, duplicate bindings, and unsupported fields.
+- Build a cross-client coverage matrix that distinguishes missing artifacts from intentionally different client bindings.
 
 ### Sync planner
 
@@ -73,6 +85,7 @@ Responsibilities:
 - Ask adapters for conversions and validation.
 - Produce field-level operations, warnings, conflicts, and restart requirements.
 - Produce no side effects.
+- Preserve target credential overrides unless the user explicitly selects a credential replacement operation.
 
 ### Transaction and snapshot service
 
@@ -84,23 +97,30 @@ Responsibilities:
 - Write temporary outputs, validate, and atomically replace.
 - Re-read through adapters and restore on failure.
 
-### Skill installer
+### Skill command gateway
 
 Responsibilities:
 
+- Map UI workflows to supported `find`, `list`, `add`, `use`, `update`, `remove`, and `init` operations.
 - Resolve source metadata.
 - Stage downloads outside active client directories.
 - Inspect content and risks.
-- Invoke `npx skills` or another selected backend through a stable interface.
+- Invoke `npx skills` or another selected backend through a stable interface without coupling the UI to CLI text output.
 - Promote verified content to the selected destination transactionally.
 
 ### Metadata and snapshot store
 
 Proposed split:
 
-- SQLite for client records, logical identities, bindings, fingerprints, plans, operations, and audit events.
+- SQLite for client records, logical identities, bindings, file fingerprints, compatibility observations, plans, operation history, and optional profile membership.
 - Filesystem snapshot directory for original bytes and directory archives.
 - Secret values excluded from both unless a future dedicated secure-store feature is approved.
+
+SQLite is not a CRUD mirror of client configuration. Live client files remain authoritative:
+
+- **Metadata** records where an artifact was observed, which adapter read it, its hash, client coverage, and last validation result.
+- **Audit** records an explicit AMS operation, affected paths, before/after hashes, outcome, and snapshot link so the operation can be explained or reversed.
+- **Profile data** is an optional post-MVP named selection of logical assets for reuse; it does not automatically enforce values onto clients.
 
 ## 3. Proposed adapter contract
 
@@ -146,7 +166,7 @@ Required guarantees:
 
 - `id`
 - `clientInstallationId`
-- `scope`: managed, user, project-shared, project-local, runtime, plugin
+- `scope`: managed, user, runtime, plugin
 - `artifactKinds`
 - `path`
 - `format`
@@ -173,6 +193,7 @@ Required guarantees:
 - `configLayerId`
 - `nativeIdentity`
 - `nativeFields`
+- `credentialBinding`: client-specific environment/header/profile references, excluded from structural drift by default
 - `effectiveState`
 - `compatibilityState`
 - `lastObservedFingerprint`
@@ -258,6 +279,7 @@ sequenceDiagram
 - Set explicit working directories, timeouts, output limits, and cancellation behavior.
 - Redact environment values and known secret patterns before persistence or display.
 - Separate “connection test” from “save configuration”; neither implies the other.
+- Route advanced Raw Config edits through parse, diff, snapshot, atomic write, and post-write validation; the raw editor is not a filesystem bypass.
 
 ## 8. Suggested repository layout
 
@@ -273,13 +295,11 @@ AgentMindStudio/
     domain/
     application/
     adapters/
+      copilot/
       codex/
-      claude-code/
-      cursor/
       kiro/
       kilo/
-      cline/
-      copilot/
+      future/
     config-formats/
     transaction/
     skill-installer/

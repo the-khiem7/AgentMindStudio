@@ -9,7 +9,7 @@
 
 1. Launch AgentMindStudio.
 2. Choose **Read-only scan** or **Standard mode**. Read-only is the safest first-run default.
-3. Review the bounded locations the app will inspect.
+3. Review the known global client locations the app will inspect. AMS does not search projects or recursively scan drives.
 4. Start discovery.
 5. Review detected clients, configuration layers, parse warnings, and unsupported versions.
 6. Add a custom path only if a known client root was not detected.
@@ -31,7 +31,7 @@ The app must not change or create client files during read-only discovery.
 
 1. Open **Clients**.
 2. Select a client.
-3. Review the layer stack from managed/global to the most specific project or runtime layer.
+3. Review the global layer stack and distinguish user-owned configuration from managed, runtime, cache, auth, or plugin-owned data.
 4. Select a layer to see its path, format, ownership, writability, and reload behavior.
 5. Open **Effective view** to understand which definition wins when names conflict.
 
@@ -59,14 +59,14 @@ If **Test connection** is available:
 ## 4. Synchronize an MCP server to another client
 
 1. From an MCP server, select **Sync to...**.
-2. Choose one or more target clients and a target scope.
+2. Choose one or more target clients. AMS writes global/user scope only.
 3. Review compatibility for each target:
    - Exact
    - Convertible
    - Partial
    - Unsupported
    - Blocked
-4. Resolve name conflicts and missing secret dependencies.
+4. Resolve name conflicts and missing secret dependencies. Existing target credential bindings remain unchanged unless explicitly selected for replacement.
 5. Review the field-level dry-run and affected file paths.
 6. Confirm snapshot creation and apply the plan.
 7. Review post-write verification and any reload/restart guidance.
@@ -75,15 +75,27 @@ Acceptance behavior:
 
 - No target is selected silently.
 - Unsupported targets cannot be forced through the normal flow.
-- The app never copies a secret value by default.
+- The app never copies a secret value by default and does not treat different client credentials as incorrect drift.
 - A failed target does not leave a partially written definition.
 
-## 5. Browse and install a skill
+## 5. Manage skills without terminal commands
+
+The Skills area should expose the upstream command concepts as graphical workflows:
+
+- **Find:** search for available skills.
+- **List:** inspect installed global skills and their client bindings.
+- **Add:** preview and install selected skills to Copilot, Codex, Kiro, or Kilo.
+- **Use once:** prepare and invoke a skill without permanently installing it when the backend supports this safely.
+- **Update:** preview source/version changes and update selected skills.
+- **Remove:** preview affected clients and remove selected bindings or installed content.
+- **Initialize:** create a new `SKILL.md` template through a guided form.
+
+### Install flow
 
 1. Open **Skills > Discover**.
 2. Search or paste an owner/repository reference supported by skills.sh.
 3. Review source identity, skill list, manifests, file trees, executable content, and warnings.
-4. Choose a target client and user/global scope.
+4. Choose one or more MVP target clients; installation is global scope.
 5. Review the exact `npx skills` command or selected installer backend.
 6. Choose whether anonymous skills CLI telemetry is enabled or disabled.
 7. Confirm installation.
@@ -106,16 +118,39 @@ Acceptance behavior:
 
 The app should prefer one shared physical directory only when both clients officially support that arrangement and the user understands the ownership consequence. Otherwise it should create managed bindings with explicit provenance.
 
-## 7. Inspect instructions and rules
+## 7. Compare client coverage
+
+1. Open **Coverage**.
+2. Choose MCP, Skills, or Instructions.
+3. Review a matrix whose columns are Copilot, Codex, Kiro, and Kilo.
+4. Select a missing cell such as **Missing in Copilot** to create a reviewed sync plan from an existing binding.
+5. Review separate indicators for structural difference and credential-binding difference.
+
+The coverage view is informational. It never deletes a client-only artifact or changes a different credential profile merely to make columns look identical.
+
+## 8. Inspect instructions and rules
 
 1. Open **Inventory > Instructions**.
 2. Filter by activation behavior: always, conditional, manual, or agent-specific.
 3. Select an instruction to see source layer and precedence.
 4. Choose **Compare representations** before attempting a cross-client conversion.
 
-The UI must not imply that an `AGENTS.md`, `CLAUDE.md`, Cursor `.mdc` rule, Kiro steering file, and Kilo instruction entry are semantically identical.
+The UI must not imply that Copilot instructions, Codex `AGENTS.md`, Kiro steering, and Kilo instructions are semantically identical.
 
-## 8. Resolve external drift
+## 9. Edit Raw Config
+
+Raw Config is an advanced escape hatch for settings the structured UI does not yet expose.
+
+1. Open a global configuration source and select **Raw Config**.
+2. Explicitly reveal sensitive values only if required.
+3. Edit the source with syntax validation and schema hints where available.
+4. Review the generated diff, warnings, and affected artifacts.
+5. Confirm snapshot creation and save.
+6. AMS re-reads the file and reports whether the client adapter still understands it.
+
+Raw editing does not bypass snapshot, external-change detection, validation, audit, or rollback.
+
+## 10. Resolve external drift
 
 When an AI client or editor changes a source file after scan:
 
@@ -127,7 +162,7 @@ When an AI client or editor changes a source file after scan:
 
 AgentMindStudio must not overwrite a changed fingerprint with an old plan.
 
-## 9. Roll back a change
+## 11. Roll back a change
 
 1. Open **History**.
 2. Select an operation.
@@ -138,7 +173,9 @@ AgentMindStudio must not overwrite a changed fingerprint with an old plan.
 
 Rollback is itself an audited operation and must not delete the historical record it restores from.
 
-## 10. Create and export a profile
+## 12. Create and export a profile (post-MVP candidate)
+
+A profile is an optional named collection for reusing a setup later. It is not the active source of truth and does not continuously enforce configuration onto clients.
 
 1. Open **Profiles** and create a named profile.
 2. Add logical assets such as MCP definitions, skills, and instructions.
@@ -152,18 +189,18 @@ Acceptance behavior:
 - Export is blocked if a detected secret would be included in plain text unless the user removes or replaces it.
 - Authentication state, sessions, caches, histories, and logs are never profile content.
 
-## 11. Import a profile
+## 13. Import a profile
 
 1. Open **Profiles > Import**.
 2. Select a bundle.
 3. Review provenance, version, checksum, artifacts, secret dependencies, and target compatibility.
 4. Import into staging.
-5. Choose target clients and scopes.
+5. Choose target clients; AMS applies imported content to global/user scope only.
 6. Apply through the normal dry-run and transaction workflow.
 
 Importing a bundle never writes directly into active configuration without a reviewed plan.
 
-## 12. Error messages must answer four questions
+## 14. Error messages must answer four questions
 
 Every actionable error should tell the user:
 
@@ -174,11 +211,11 @@ Every actionable error should tell the user:
 
 Example:
 
-> Claude Code configuration changed after this plan was created. Nothing was written. Rescan the target and review a new plan.
+> Kilo configuration changed after this plan was created. Nothing was written. Rescan the target and review a new plan.
 
 Avoid exposing raw stack traces, full command environments, tokens, or configuration content in default error dialogs.
 
-## 13. MVP acceptance journeys
+## 15. MVP acceptance journeys
 
 ### Journey A — First inventory
 
@@ -188,13 +225,13 @@ Avoid exposing raw stack traces, full command environments, tokens, or configura
 
 ### Journey B — Safe MCP sync
 
-**Given** a portable MCP server in Codex and a compatible Claude Code target  
+**Given** a portable MCP server in Codex and a compatible Kilo target with a different credential binding  
 **When** the user reviews and confirms the generated plan  
-**Then** the target is written, validated, auditable, and restorable without copying secret values.
+**Then** the target structure is written, validated, auditable, and restorable without copying or replacing its credential binding.
 
 ### Journey C — Lossy conversion prevented
 
-**Given** a source instruction whose activation semantics cannot be represented in Cursor  
+**Given** a source instruction whose activation semantics cannot be represented in Kiro  
 **When** the user attempts synchronization  
 **Then** the app marks it partial or unsupported and identifies the exact semantic loss before any write.
 
@@ -216,26 +253,34 @@ Avoid exposing raw stack traces, full command environments, tokens, or configura
 **When** the transaction aborts  
 **Then** active client configuration remains at the pre-operation state and the UI reports the recovery result.
 
-## 14. Terminology shown in the UI
+### Journey G — Coverage gap
+
+**Given** one MCP is configured in Kilo but missing from Copilot  
+**When** the user opens the MCP coverage matrix  
+**Then** AMS displays the missing Copilot binding and offers a manual sync action without modifying either client automatically.
+
+## 16. Terminology shown in the UI
 
 | Product term | User-facing explanation |
 |---|---|
 | Artifact | A reusable AI setup item such as an MCP server, skill, or instruction. |
-| Layer | One location a client reads configuration from, with its own scope and priority. |
+| Layer | One global location a client reads configuration from, with its own ownership and priority. |
 | Binding | How one reusable item is represented in a specific client. |
+| Credential binding | A client-specific environment, header, token reference, or credential profile intentionally kept separate from portable MCP structure. |
 | Compatibility | How faithfully an item can be represented in a target client. |
 | Dry-run | A preview of changes with no files modified. |
 | Snapshot | A recoverable copy made immediately before a change. |
 | Drift | A source changed outside AgentMindStudio after it was last scanned. |
 | Secret dependency | The name of a required credential or environment variable, not its value. |
 
-## 15. Safety defaults
+## 17. Safety defaults
 
 - First launch starts in read-only scan mode.
-- Raw views are redacted.
+- Raw views are redacted by default; Raw Config writes require advanced confirmation and the normal transaction safeguards.
 - Writes require a dry-run and confirmation.
 - Marketplace installs require source and file preview.
 - Telemetry choice is visible before first skills CLI execution.
 - Continuous sync is off.
-- Managed and unverified-version layers are not writable.
+- Project scanning and project-scope management are out of scope.
+- Managed layers and configuration shapes the adapter cannot safely preserve are not writable.
 - Snapshots are enabled and cannot be disabled for normal writes in MVP.

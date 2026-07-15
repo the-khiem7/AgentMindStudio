@@ -15,13 +15,13 @@
 
 Tasks:
 
-- [ ] Decide whether the logical asset store is authoritative, advisory, or profile-only.
-- [ ] Decide the local metadata store and snapshot retention policy.
-- [ ] Decide how secrets are referenced on Windows for MVP.
+- [x] Keep client configuration files authoritative; AMS writes only through explicit user operations.
+- [x] Use SQLite for metadata and filesystem storage for snapshot bytes.
+- [x] Preserve MCP credentials as per-client bindings; do not normalize credential differences as drift.
 - [ ] Decide whether `npx skills` is invoked directly or its open-source library is embedded behind a stable internal interface.
-- [ ] Decide whether project layers are read-only or writable in the first public MVP.
+- [x] Restrict product scope to global/user configuration; do not scan or manage project layers.
 - [ ] Define the adapter capability and compatibility contracts.
-- [ ] Collect sanitized fixtures for each supported client, scope, and artifact type.
+- [ ] Collect sanitized fixtures for Copilot, Codex, Kiro, and Kilo global configuration and each MVP artifact type.
 - [ ] Define a client/version support policy and unsupported-version UX.
 - [ ] Threat-model filesystem writes, package installation, MCP process tests, symlinks, and exported bundles.
 
@@ -39,18 +39,19 @@ Exit criteria:
 Tasks:
 
 - [ ] Scaffold the ElectroBun application and Windows packaging.
+- [ ] Define platform ports for filesystem roots, process execution, credential access, and packaging so a macOS implementation can be added later.
 - [ ] Implement the adapter registry and client detection service.
 - [ ] Implement bounded path discovery with custom-path overrides.
 - [ ] Implement parsers for JSON, JSONC, TOML, YAML/frontmatter, and Markdown.
 - [ ] Build the normalized inventory for clients, layers, artifacts, and bindings.
 - [ ] Add redaction and sensitive-field classification.
 - [ ] Implement effective-layer and shadowing analysis.
-- [ ] Build dashboard, client detail, artifact list, structured detail, and redacted raw views.
+- [ ] Build dashboard, cross-client coverage matrix, client detail, artifact list, structured detail, and redacted raw views.
 - [ ] Add diagnostics export that excludes content and secret values by default.
 
 Exit criteria:
 
-- The app detects the installed named clients on a Windows test matrix.
+- The app detects Copilot, Codex, Kiro, and Kilo on a Windows test matrix.
 - A malformed configuration cannot crash the scan.
 - Every displayed item includes source path, scope, ownership, and adapter confidence.
 - Read-only mode performs no mutation, process launch, or package installation.
@@ -68,6 +69,7 @@ Tasks:
 - [ ] Implement atomic replace and multi-file transaction orchestration.
 - [ ] Implement post-write adapter re-read and validation.
 - [ ] Build the audit history and one-click rollback workflow.
+- [ ] Route the advanced Raw Config editor through the same diff, validation, snapshot, transaction, and rollback pipeline.
 - [ ] Add failure-injection tests for locks, permission errors, process crashes, and partial writes.
 
 Exit criteria:
@@ -76,15 +78,17 @@ Exit criteria:
 - Injected failures leave the original configuration intact or automatically restored.
 - Reapplying an applied plan yields no additional changes.
 
-## Phase 3 — First vertical adapter cohort
+## Phase 3 — MVP client adapters
 
-**Goal:** Prove end-to-end synchronization for Codex, Claude Code, and Cursor.
+**Goal:** Prove end-to-end inventory and manual synchronization for Copilot, Codex, Kiro, and Kilo.
 
 Tasks:
 
-- [ ] Implement user-scope MCP read/write adapters for the three clients.
+- [ ] Implement global/user MCP read/write adapters for the four clients.
 - [ ] Implement user-scope skill read/write adapters.
 - [ ] Implement instruction/rule inventory and only the conversions marked safe.
+- [ ] Implement a coverage matrix that shows missing MCP, skill, and instruction bindings per client.
+- [ ] Separate portable MCP structure from per-client credential overrides in comparison and sync plans.
 - [ ] Implement enable/disable behavior where the target client supports it.
 - [ ] Build source-target compatibility matrix and plain-language conversion explanations.
 - [ ] Add restart/reload guidance per client.
@@ -92,19 +96,20 @@ Tasks:
 
 Exit criteria:
 
-- A portable MCP definition and a portable skill can be synchronized among all three clients through the UI.
+- A portable MCP definition and a portable skill can be synchronized among supported target combinations through the UI without replacing target credentials by default.
 - Unsupported fields block or warn according to the compatibility contract.
 - Client-specific extensions survive round trips.
 - Rollback restores the exact pre-operation state.
 
-## Phase 4 — skills.sh desktop workflow
+## Phase 4 — skills command center
 
-**Goal:** Make skill acquisition safe and accessible without terminal knowledge.
+**Goal:** Expose the supported `npx skills` command family through UI/UX without terminal knowledge.
 
 Tasks:
 
 - [ ] Detect Node.js, npm, and `npx` prerequisites.
-- [ ] Add source/repository lookup and metadata preview.
+- [ ] Implement skill discovery/search (`find`) and installed inventory (`list`).
+- [ ] Add source/repository lookup and metadata preview for `add` and `use`.
 - [ ] Fetch into a staging directory before installation.
 - [ ] Inspect file list, manifest, symlinks, and executable content.
 - [ ] Add target client and scope selection.
@@ -112,39 +117,42 @@ Tasks:
 - [ ] Stream sanitized progress and expose cancellation behavior.
 - [ ] Re-scan and validate installed artifacts.
 - [ ] Roll back incomplete installations.
+- [ ] Implement update preview and execution (`update`).
+- [ ] Implement removal preview and execution (`remove`).
+- [ ] Implement skill template creation (`init`).
 
 Exit criteria:
 
-- A new user can preview and install a public skill without opening a terminal.
+- A new user can find, inspect, install, list, use, update, remove, and initialize skills without opening a terminal.
 - No skill script is executed merely because the package was previewed or installed.
 - Failure leaves no untracked partial target directory.
 
-## Phase 5 — Remaining client adapters
+## Phase 5 — Additional client adapters
 
-**Goal:** Expand supported writes to Kiro, Kilo Code, Cline, and GitHub Copilot.
+**Goal:** Add clients such as Claude Code, Cursor, and Cline without changing the core domain or transaction model.
 
 Tasks:
 
-- [ ] Implement Kiro global/project/agent scope inventory and supported global writes.
-- [ ] Implement Kilo split-root discovery and JSONC/skill adapters.
-- [ ] Implement Cline configuration, MCP, rules, and skill adapters.
-- [ ] Implement Copilot CLI configuration, instruction, MCP, and skill adapters.
+- [ ] Implement Claude Code global configuration, MCP, instruction, and skill adapters.
+- [ ] Implement Cursor global configuration, MCP, rule, and skill adapters.
+- [ ] Implement Cline global configuration, MCP, rules, and skill adapters.
 - [ ] Add legacy-path migration warnings without silently moving files.
 - [ ] Add per-version fixtures and compatibility tests.
 
 Exit criteria:
 
-- All seven named clients have documented read coverage.
+- Each new adapter has documented global-scope coverage.
 - Each write-capable adapter passes the full transaction and round-trip suite.
 - Unsupported features are visible and do not disappear during unrelated writes.
 
-## Phase 6 — Profiles and portable bundles
+## Phase 6 — Optional profiles and portable bundles
 
 **Goal:** Let the user move a curated environment without transferring secrets.
 
 Tasks:
 
-- [ ] Create, rename, duplicate, and delete named profiles.
+- [ ] Validate that named profiles solve a real portability need beyond direct client-to-client operations.
+- [ ] Create, rename, duplicate, and delete named profiles only if validated.
 - [ ] Add logical assets and selected target bindings to profiles.
 - [ ] Export versioned manifests, content, checksums, and provenance.
 - [ ] Replace credentials with declared secret/environment dependencies.
@@ -182,25 +190,28 @@ Exit criteria:
 | Priority | Epic | Business value | Main dependency |
 |---|---|---|---|
 | P0 | Layer-aware discovery | Makes hidden configuration understandable | Adapter registry |
+| P0 | Cross-client coverage matrix | Makes missing MCP, skill, and instruction bindings explicit | Logical asset identity |
 | P0 | Safe transaction and rollback | Establishes trust for all writes | Snapshot policy |
 | P0 | Secret-safe inventory | Prevents accidental credential exposure | Sensitive-field model |
 | P0 | Cross-client MCP and skill sync | Solves the central portability pain point | Compatibility model |
 | P1 | skills.sh UI | Removes CLI friction | Safe process runner |
-| P1 | Profiles and export/import | Makes setups reusable and movable | Logical asset identity |
+| P2 | Optional profiles and export/import | Makes curated setups reusable and movable | Validated user need |
 | P1 | Drift detection | Shows divergence after external edits | File fingerprints/watchers |
-| P2 | Project-scope sync | Supports team/repository workflows | Git and scope policy |
-| P2 | Hooks, agents, prompts, plugins | Broadens customization coverage | Additional adapter contracts |
+| P2 | Hooks, agents, prompts, plugins | Broadens global customization coverage | Additional adapter contracts |
+| P2 | macOS platform implementation | Expands platform reach without domain rewrite | Platform ports |
 | P3 | Encrypted cloud/team sync | Enables multi-device/team use | Identity, encryption, backend |
 
 ## First next action
 
-Create an adapter spike for Codex and Claude Code using sanitized fixtures. The spike must demonstrate:
+Create an adapter spike for Codex and Kilo using sanitized global fixtures. These two clients exercise different formats and Kilo's split configuration roots. The spike must demonstrate:
 
 1. layer discovery,
 2. normalized MCP and skill models,
 3. a field-level dry-run between the two formats,
 4. snapshot and rollback,
 5. secret redaction,
-6. preservation of unknown client-specific fields.
+6. preservation of unknown client-specific fields,
+7. intentional per-client MCP credential overrides,
+8. extensibility for Copilot and Kiro without changing the core model.
 
 Do not start with the full settings UI; the adapter and transaction spike is the highest-risk proof.
