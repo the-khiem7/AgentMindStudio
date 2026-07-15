@@ -15,7 +15,7 @@
   <g transform="translate(40 110)">
     <rect class="panel" width="750" height="200" rx="14"/>
     <text x="22" y="30" class="num">01 · FIRST-RUN DISCOVERY</text><text x="22" y="60" class="t">See what each AI client reads</text>
-    <rect class="inner" x="22" y="78" width="220" height="96" rx="8"/><text x="38" y="102" class="b">Copilot CLI</text><text x="38" y="126" class="ok b">✓ Ready</text><text x="38" y="150" class="mono">…\.copilot\user.json</text>
+    <rect class="inner" x="22" y="78" width="220" height="96" rx="8"/><text x="38" y="102" class="b">Copilot CLI</text><text x="38" y="126" class="ok b">✓ Ready</text><text x="38" y="150" class="mono">~/.copilot/mcp-config.json</text>
     <rect class="inner" x="256" y="78" width="220" height="96" rx="8"/><text x="272" y="102" class="b">Codex</text><text x="272" y="126" class="ok b">✓ Ready</text><text x="272" y="150" class="mono">…\.codex\config.toml</text>
     <rect class="inner" x="490" y="78" width="238" height="96" rx="8"/><text x="506" y="102" class="b">Kiro</text><text x="506" y="126" class="bad b">× Permission blocked</text><text x="506" y="150" class="m">Nothing was changed.</text>
   </g>
