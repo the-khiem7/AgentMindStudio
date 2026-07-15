@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "surface": "copilot-cli",
+  "artifact": "mcp",
+  "formatSupportsComments": false,
+  "provenanceCategory": "official-example-derived",
+  "sanitizationDate": "2026-07-16",
+  "sourceVersion": "surface absent locally; GitHub Docs reviewed 2026-07-16",
+  "expectedNormalizedOutput": "expected-normalized.json",
+  "cases": [
+    {"id":"empty","path":"empty.json","expectedParseState":"empty","scenarios":["empty-minimal"]},
+    {"id":"layered","path":"layered","expectedParseState":"valid","scenarios":["representative-valid","unknown-field","name-collision","linked-alias","credential-binding-difference"]},
+    {"id":"malformed","path":"malformed.json","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}

@@ -1,0 +1,1 @@
+{"surface":"kilo","instructions":[{"source":".kilo/rules/always.md","activation":"always-reference","order":0},{"source":".kilo/rules/format.fixture.md","activation":"glob-reference","order":1}],"warnings":[{"source":".kilo/rules/missing.md","code":"MISSING_REFERENCED_INSTRUCTION"}]}

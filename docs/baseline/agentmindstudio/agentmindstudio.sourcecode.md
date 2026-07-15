@@ -1,11 +1,11 @@
 # AgentMindStudio — Proposed Technical Baseline
 
 **Baseline date:** 2026-07-15  
-**Application implemented state:** None. The repository contains Nexus, baseline, ADR, and spike evidence, including the passed TG-001 ElectroBun foundation prototype and the passed TG-002 adapter-contract proof, but no production application source. Everything below remains proposed rather than implemented.
+**Application implemented state:** None. The repository contains Nexus, baseline, ADR, spike evidence, and sanitized fixture contracts, including passed TG-001 through TG-004, but no production application source. Everything below remains proposed rather than implemented.
 
 **Authority:** This technical baseline inherits product intent from the [Project Nexus](../../nexus/README.md).
 
-**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). TG-001 permits the ElectroBun scaffold and Windows platform-port commitment with its documented limitations. TG-002 approves adapter contract `1.0.0` for contract-shaped fixture and downstream design work, but it does not authorize production client adapters; those remain blocked by TG-003 and TG-004. Every production component below remains proposed until its own required gates pass and production code/tests exist.
+**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). TG-001 permits the ElectroBun scaffold and Windows platform-port commitment with its documented limitations. TG-002 approves adapter contract `1.0.0`; TG-003 verifies user/global surface source rules; TG-004 supplies the parser/golden-test fixture contract. Client-specific read adapter implementation is now ready, but no production adapter exists and no gate authorizes writes. Every production component below remains proposed until its required gates pass and production code/tests exist.
 
 ## 1. Architecture objective
 
@@ -137,7 +137,7 @@ SQLite is not a CRUD mirror of client configuration. Live client files remain au
 
 ## 3. Approved adapter contract
 
-TG-002 accepted [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md) and contract version `1.0.0` in [`docs/spikes/adapter-contract/`](../../spikes/adapter-contract/). The contract compiles with Codex and Kilo proof adapters through one condition-free registry. Client-specific production adapters remain proposed until TG-003 source evidence and TG-004 fixtures pass.
+TG-002 accepted [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md) and contract version `1.0.0` in [`docs/spikes/adapter-contract/`](../../spikes/adapter-contract/). The contract compiles with Codex and Kilo proof adapters through one condition-free registry. TG-003 and TG-004 now provide the verified [surface evidence](../../spikes/client-surface-config/README.md) and [`fixtures/clients/`](../../../fixtures/clients/) contract required to begin production read adapters. No parser/read adapter has yet been implemented, and fixture preservation cases do not authorize writes.
 
 An adapter provides behavior equivalent to:
 

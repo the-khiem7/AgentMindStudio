@@ -1,0 +1,14 @@
+{
+  "schemaVersion":1,
+  "surface":"copilot-vscode",
+  "artifact":"instruction",
+  "provenanceCategory":"official-example-derived",
+  "sanitizationDate":"2026-07-16",
+  "sourceVersion":"VS Code 1.128.1; GitHub Copilot extension absent; docs reviewed 2026-07-16",
+  "requiredActivationVariants":["all-files","file-match","semantic"],
+  "expectedNormalizedOutput":"expected-normalized.json",
+  "cases":[
+    {"id":"activation-set","path":"activation-set","expectedParseState":"valid","scenarios":["representative-valid","all-files","file-match","semantic"]},
+    {"id":"malformed","path":"malformed.instructions.md","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}

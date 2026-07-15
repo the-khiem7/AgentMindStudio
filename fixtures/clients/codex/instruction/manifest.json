@@ -1,0 +1,15 @@
+{
+  "schemaVersion":1,
+  "surface":"codex",
+  "artifact":"instruction",
+  "provenanceCategory":"sanitized-synthetic-from-official-contract",
+  "sanitizationDate":"2026-07-16",
+  "sourceVersion":"codex-cli 0.125.0; official docs reviewed 2026-07-16",
+  "requiredActivationVariants":["always","override-selection"],
+  "expectedNormalizedOutput":"expected-normalized.json",
+  "cases":[
+    {"id":"base","path":"AGENTS.md","expectedParseState":"valid","scenarios":["representative-valid","always"]},
+    {"id":"override","path":"AGENTS.override.md","expectedParseState":"valid","scenarios":["override-selection"]},
+    {"id":"empty-ignored","path":"empty-AGENTS.md","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-07-16T02:26:55+07:00",
+  "status": "pass",
+  "checks": {
+    "matrixReadRows": 15,
+    "manifests": 15,
+    "positiveAndFailureCases": true,
+    "expectedNormalizedOutputs": true,
+    "scenarioCoverage": true,
+    "secretScanFiles": 79,
+    "secretHits": 0
+  },
+  "errors": []
+}

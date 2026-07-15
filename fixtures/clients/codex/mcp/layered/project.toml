@@ -1,0 +1,7 @@
+[mcp_servers.collision]
+url = "https://two.example.invalid/mcp"
+bearer_token_env_var = "FIXTURE_TWO_TOKEN"
+
+[mcp_servers.secondary-alias]
+url = "https://shared.example.invalid/mcp"
+bearer_token_env_var = "FIXTURE_PROJECT_TOKEN"

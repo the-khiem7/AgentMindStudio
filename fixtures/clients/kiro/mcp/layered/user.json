@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "collision": {"url":"https://one.example.invalid/mcp","headers":{"Authorization":"${FIXTURE_ONE_TOKEN}"},"fixtureUnknown":"preserve-me"},
+    "primary-alias": {"url":"https://shared.example.invalid/mcp","headers":{"Authorization":"${FIXTURE_USER_TOKEN}"}},
+    "local-tool": {"command":"fixture-mcp","args":["--mode","safe"],"env":{"API_TOKEN":"${FIXTURE_LOCAL_TOKEN}"},"disabled":false}
+  }
+}

@@ -1,0 +1,1 @@
+{"surface":"codex","skills":[{"name":"fixture-review","description":"Review fixture-only changes without accessing credentials.","activation":"on-demand","source":"$HOME/.agents/skills/fixture-review","unknownFields":["metadata.fixture-extension"]}]}

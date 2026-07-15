@@ -34,8 +34,8 @@ Gate update protocol:
 |---|---|---|---|---|---|---|
 | TG-001 | Can ElectroBun safely provide the required Windows filesystem, process, SQLite, and packaging primitives? | `passed` | Codex | Production scaffold and platform-port commitment | None | [Spike](../../spikes/electrobun-foundation/2026-07-15-electrobun-1.18.1-windows.md), [passing report](../../spikes/electrobun-foundation/runs/20260715-174500/results.json) |
 | TG-002 | Is the adapter and capability contract precise enough for independent client adapters? | `passed` | Codex | Client-specific read/write adapter implementation | Nexus domain model | [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md), [contract proof](../../spikes/adapter-contract/README.md), [passing report](../../spikes/adapter-contract/runs/20260716-011900/results.json) |
-| TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `in_progress` | Codex | Discovery rules and fixture completion | None | [Evidence pack](../../spikes/client-surface-config/README.md), [surface-artifact matrix](../../spikes/client-surface-config/surface-artifact-matrix.json), [sanitized local report](../../spikes/client-surface-config/runs/20260716-ams-windows/results.json) |
-| TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `planned` | Codex | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | Planned: `fixtures/clients/` |
+| TG-003 | Are global sources, formats, ownership, precedence, and reload behavior verified for every MVP surface? | `passed` | Codex | Discovery rules and fixture completion | None | [Evidence pack](../../spikes/client-surface-config/README.md), [surface-artifact matrix](../../spikes/client-surface-config/surface-artifact-matrix.json), [sanitized local report](../../spikes/client-surface-config/runs/20260716-ams-windows/results.json) |
+| TG-004 | Do sanitized fixtures cover every supported read shape and preservation risk? | `passed` | Codex | Parser support claims, read adapters, and round-trip tests | TG-002, TG-003 | [Fixture pack](../../../fixtures/clients/), [passing verification and secret scan](../../../fixtures/clients/verification-results.json) |
 | TG-005 | Does the first SQLite schema represent identities, bindings, observations, plans, audit, and recovery without storing secrets? | `planned` | Unassigned | Persistence-backed inventory and operation journal | TG-002; scaffold from TG-001 | Planned: `docs/adr/ADR-0002-sqlite-metadata-schema.md` and migration `0001` |
 | TG-006 | Are filesystem, package, process, MCP, symlink, snapshot, log, and export threats understood and mitigated? | `planned` | Unassigned | Phase 2 mutation and every mutating skills workflow | TG-001, TG-002, TG-005 | Planned: `agentmindstudio.threat-model.md` |
 | TG-007 | Are navigation, Coverage, Diff, Apply, error, and read-only Instruction flows approved before production UI work? | `planned` | Unassigned | Production implementation of the corresponding UI flows | Closed product decisions | Planned: `docs/spikes/ui-exploration/` |
@@ -47,7 +47,7 @@ Gate update protocol:
 |---|---|---|
 | Start technical spikes and ADR work | `ready` | Product decisions are closed. |
 | Commit to the ElectroBun production scaffold | `ready` | TG-001 passed with documented packaging/lifecycle limitations. |
-| Implement client-specific read adapters | `not ready` | TG-003 and TG-004 remain under review; TG-002 is passed. |
+| Implement client-specific read adapters | `ready` | TG-002, TG-003, and TG-004 passed; write capabilities remain unauthorized. |
 | Persist normalized inventory in SQLite | `not ready` | TG-005 |
 | Implement production Dashboard/Coverage/Diff flows | `not ready` | TG-007 plus the relevant read services |
 | Enter Phase 2 mutation engine | `not ready` | Read-only foundation exit plus TG-006 |
@@ -86,8 +86,8 @@ flowchart TD
 
 ### Execution waves
 
-1. **Wave 0 — Parallel evidence:** complete TG-003 and continue TG-007 according to the dashboard's current status. Do not rerun a passed gate unless an invalidation trigger occurs.
-2. **Wave 1 — Read-only foundation:** create the scaffold and platform ports. Complete TG-004 and TG-005, then implement discovery/read adapters, persistent inventory, and the approved shadcn/ui read flows.
+1. **Wave 0 — Parallel evidence:** TG-001 through TG-004 are passed. Continue TG-007 according to the dashboard's current status. Do not rerun a passed gate unless an invalidation trigger occurs.
+2. **Wave 1 — Read-only foundation:** create the scaffold and platform ports, complete TG-005, then implement discovery/read adapters against the passed TG-004 fixture contract, persistent inventory, and the approved shadcn/ui read flows.
 3. **Wave 2 — Mutation safety:** complete TG-006 and the read-only vertical slice, then implement snapshots, fingerprints, transaction state, atomic writes, verification, and recovery.
 4. **Wave 3 — Writable capabilities:** implement MCP/skill write adapters and reviewed synchronization. Implement mutating skills workflows only with TG-008 plus Phase 2 safeguards.
 
@@ -284,9 +284,37 @@ Owner: Codex
 Environment/versions: Windows NT 10.0.22631 AMD64; Node.js 24.13.1; TypeScript 6.0.2; adapter contract 1.0.0  
 Artifacts: [ADR-0001](../../adr/ADR-0001-adapter-capability-contract.md) and [`docs/spikes/adapter-contract/`](../../spikes/adapter-contract/)  
 Verification evidence: [Passing strict-compile and contract-proof report](../../spikes/adapter-contract/runs/20260716-011900/results.json)  
-Limitations: proof adapters use synthetic, secret-free native shapes; they establish the interface and capability invariants but do not verify production client paths, precedence, parser round trips, or write preservation, which remain TG-003/TG-004 work. TypeScript cannot prevent ambient side effects, so adapter purity remains a review and deterministic-test invariant.  
+Limitations: proof adapters use synthetic, secret-free native shapes; they establish the interface and capability invariants but do not themselves verify production client paths, precedence, parser round trips, or write preservation. TG-003/TG-004 evidence is tracked separately below. TypeScript cannot prevent ambient side effects, so adapter purity remains a review and deterministic-test invariant.  
 Invalidation triggers confirmed: reopen when an MVP artifact or surface cannot be represented without breaking contract 1.0.0.  
 Affected roadmap/sourcecode sections: roadmap first action proceeds to TG-003; the technical baseline now references the accepted contract and keeps all production adapters proposed.
+
+### TG-003 completion — 2026-07-16
+
+Gate: TG-003  
+Previous state: `in_progress`  
+New state: `passed`  
+Reviewed at: 2026-07-16 02:25 Asia/Saigon  
+Owner: Codex  
+Environment/versions: Windows NT 10.0.22631 X64; PowerShell 7.5.4; Codex CLI 0.125.0; Kiro CLI 2.8.0; Kilo CLI 7.3.21; Kilo VS Code 7.4.7; VS Code 1.128.1; Copilot CLI and Copilot VS Code extension absent  
+Artifacts: [`docs/spikes/client-surface-config/`](../../spikes/client-surface-config/) and updated [client surface matrix](../../nexus/client-surface-matrix.md)  
+Verification evidence: [15-row surface-artifact matrix](../../spikes/client-surface-config/surface-artifact-matrix.json) and [metadata-only local report](../../spikes/client-surface-config/runs/20260716-ams-windows/results.json)  
+Limitations: local verification reads metadata only and does not expose config bytes, child names, resolved user paths, or auth state. Copilot behavior is based on current official documentation because neither Copilot surface was installed. Same-name precedence remains explicitly unknown where official documentation does not define it. No write capability is authorized.  
+Invalidation triggers confirmed: reopen when a client version changes a documented path, format, precedence rule, reload behavior, shared-source relationship, or supported capability.  
+Affected roadmap/sourcecode sections: the next production boundary is discovery/read adapters against TG-002 through TG-004; production implementation remains absent.
+
+### TG-004 completion — 2026-07-16
+
+Gate: TG-004  
+Previous state: `planned`  
+New state: `passed`  
+Reviewed at: 2026-07-16 02:25 Asia/Saigon  
+Owner: Codex  
+Environment/versions: fixture schema 1; PowerShell 7.5.4 verifier; source-version and provenance category recorded per manifest  
+Artifacts: [`fixtures/clients/`](../../../fixtures/clients/) with one manifest and expected normalized output per 15 supported read rows  
+Verification evidence: [passing manifest, scenario, expected-output, and secret-scan report](../../../fixtures/clients/verification-results.json)  
+Limitations: fixtures authorize parser/read implementation only. They do not prove production parsers, byte-for-byte round trips, comment/unknown-field writes, active-client reload, or mutation preservation. Copilot fixtures are official-example-derived because the surfaces were absent locally.  
+Invalidation triggers confirmed: reopen when adapter read support expands to a new schema, path, surface, artifact behavior, or activation mode.  
+Affected roadmap/sourcecode sections: read-adapter implementation is now ready; all write adapters and instruction mutations remain blocked or out of scope.
 
 ## 6. Gate completion record template
 

@@ -1,0 +1,1 @@
+{"surface":"copilot-vscode","skills":[{"name":"fixture-review","description":"Review fixture-only changes without accessing credentials.","activation":"auto-and-manual","source":"$HOME/.copilot/skills/fixture-review","unknownFields":["fixture-extension"]}]}

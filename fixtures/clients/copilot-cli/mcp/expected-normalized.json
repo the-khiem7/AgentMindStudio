@@ -1,0 +1,15 @@
+{
+  "surface":"copilot-cli",
+  "artifacts":[
+    {"name":"collision","layer":"user","transport":"http","endpoint":"https://one.example.invalid/mcp","credentialRefs":["FIXTURE_ONE_TOKEN"],"unknownFields":["fixtureUnknown"]},
+    {"name":"collision","layer":"workspace","transport":"http","endpoint":"https://two.example.invalid/mcp","credentialRefs":["FIXTURE_TWO_TOKEN"]},
+    {"name":"primary-alias","layer":"user","transport":"http","endpoint":"https://shared.example.invalid/mcp","credentialRefs":["FIXTURE_USER_TOKEN"]},
+    {"name":"secondary-alias","layer":"workspace","transport":"http","endpoint":"https://shared.example.invalid/mcp","credentialRefs":["FIXTURE_PROJECT_TOKEN"]},
+    {"name":"local-tool","layer":"user","transport":"stdio","command":["fixture-mcp","--mode","safe"],"credentialRefs":["FIXTURE_LOCAL_TOKEN"]}
+  ],
+  "relations":[
+    {"type":"NameCollision","bindings":["user:collision","workspace:collision"]},
+    {"type":"LinkedAlias","bindings":["user:primary-alias","workspace:secondary-alias"]},
+    {"type":"CredentialBindingDifference","bindings":["user:primary-alias","workspace:secondary-alias"]}
+  ]
+}

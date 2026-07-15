@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "surface": "kiro",
+  "artifact": "mcp",
+  "formatSupportsComments": false,
+  "provenanceCategory": "sanitized-local-shape-plus-official-example",
+  "sanitizationDate": "2026-07-16",
+  "sourceVersion": "kiro-cli-chat 2.8.0; Kiro docs updated 2026-06-10",
+  "expectedNormalizedOutput": "expected-normalized.json",
+  "cases": [
+    {"id":"empty","path":"empty.json","expectedParseState":"empty","scenarios":["empty-minimal"]},
+    {"id":"layered","path":"layered","expectedParseState":"valid","scenarios":["representative-valid","unknown-field","name-collision","linked-alias","credential-binding-difference"]},
+    {"id":"malformed","path":"malformed.json","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}

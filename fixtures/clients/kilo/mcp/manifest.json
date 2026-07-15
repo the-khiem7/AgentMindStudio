@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "surface": "kilo",
+  "artifact": "mcp",
+  "formatSupportsComments": true,
+  "provenanceCategory": "sanitized-local-shape-plus-official-example",
+  "sanitizationDate": "2026-07-16",
+  "sourceVersion": "Kilo CLI 7.3.21; VS Code extension 7.4.7; docs reviewed 2026-07-16",
+  "expectedNormalizedOutput": "expected-normalized.json",
+  "cases": [
+    {"id":"empty","path":"empty.jsonc","expectedParseState":"empty","scenarios":["empty-minimal"]},
+    {"id":"layered","path":"layered","expectedParseState":"valid","scenarios":["representative-valid","comments-preservation","unknown-field","name-collision","linked-alias","credential-binding-difference"]},
+    {"id":"malformed","path":"malformed.jsonc","expectedParseState":"malformed","scenarios":["malformed"]}
+  ]
+}

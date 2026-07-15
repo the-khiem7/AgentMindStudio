@@ -1,0 +1,1 @@
+{"surface":"copilot-cli","skills":[{"name":"fixture-review","description":"Review fixture-only changes without accessing credentials.","activation":"on-demand","source":"$COPILOT_HOME/skills/fixture-review","unknownFields":["metadata.fixture-extension"]}]}

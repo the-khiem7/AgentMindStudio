@@ -1,0 +1,14 @@
+# fixture comment must survive a read-only round trip
+[mcp_servers.collision]
+url = "https://one.example.invalid/mcp"
+bearer_token_env_var = "FIXTURE_ONE_TOKEN"
+fixture_unknown = "preserve-me"
+
+[mcp_servers.primary-alias]
+url = "https://shared.example.invalid/mcp"
+bearer_token_env_var = "FIXTURE_USER_TOKEN"
+
+[mcp_servers.local-tool]
+command = "fixture-mcp"
+args = ["--mode", "safe"]
+env_vars = ["FIXTURE_LOCAL_TOKEN"]
