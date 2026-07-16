@@ -21,7 +21,7 @@ describe("Windows platform ports", () => {
     try {
       writeFileSync(join(root, "dữ liệu.txt"), "verified", "utf8");
       const fileSystem = new WindowsBoundedFileSystem();
-      expect(await fileSystem.readText(root, "dữ liệu.txt")).toBe("verified");
+      expect(await fileSystem.readText(root, "dữ liệu.txt", 1_024)).toBe("verified");
       expect(() => fileSystem.resolveWithin(root, "..\\outside.txt")).toThrow("Path escapes");
     } finally {
       rmSync(root, { recursive: true, force: true });

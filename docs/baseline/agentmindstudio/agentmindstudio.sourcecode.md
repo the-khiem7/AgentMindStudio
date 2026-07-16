@@ -5,7 +5,7 @@
 
 **Authority:** This technical baseline inherits product intent from the [Project Nexus](../../nexus/README.md).
 
-**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). TG-001 permitted the implemented ElectroBun scaffold and Windows platform-port foundation. TG-002 approves adapter contract `1.0.0`; TG-003 verifies user/global surface source rules; TG-004 supplies the parser/golden-test fixture contract. Client-specific read adapter implementation is now ready, but no production adapter exists and no gate authorizes writes. TG-005 verifies the metadata schema and operation journal described by [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md). TG-006 still blocks mutation infrastructure, and TG-007 still blocks production UI flows.
+**Implementation readiness:** Gate status and evidence are owned by [agentmindstudio.technical-gates.md](agentmindstudio.technical-gates.md). TG-001 permitted the implemented ElectroBun scaffold and Windows platform-port foundation. TG-002 approves adapter contract `1.0.0`; TG-003 verifies user/global surface source rules; TG-004 supplies the parser/golden-test fixture contract. Client-specific read adapter implementation is ready, but no production adapter exists and no gate authorizes writes. TG-005 verifies the metadata schema and operation journal described by [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md). TG-006 now verifies the [security threat/control contract](agentmindstudio.threat-model.md); the read-only vertical-slice exit still blocks Phase 2, mapped future security tests still gate individual mutation capabilities, and TG-007 still blocks production UI flows.
 
 ### Verified foundation boundary
 
@@ -310,6 +310,7 @@ sequenceDiagram
 ## 7. Filesystem and process safety
 
 - Resolve and normalize absolute paths before access.
+- Require bounded text reads and reject existing targets whose resolved path escapes through a symlink or junction.
 - Require every write target to remain under an adapter-declared root or a user-approved custom root.
 - Refuse traversal outside staging/target roots.
 - Inspect symlinks and junctions before recursive operations.

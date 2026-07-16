@@ -35,18 +35,27 @@ const child = Bun.spawn({
 
 try {
   const deadline = Date.now() + 15_000;
-  while (!existsSync(databasePath) && Date.now() < deadline) {
+  let migration: unknown = null;
+  let lastReadError: unknown = null;
+  while (Date.now() < deadline) {
+    if (existsSync(databasePath)) {
+      try {
+        const database = new Database(databasePath, { readonly: true, strict: true });
+        try {
+          migration = database.query("SELECT version, name FROM schema_migrations").get();
+        } finally {
+          database.close();
+        }
+        if (JSON.stringify(migration) === JSON.stringify({ version: 1, name: "metadata" })) break;
+      } catch (error) {
+        lastReadError = error;
+      }
+    }
     await Bun.sleep(100);
   }
-  if (!existsSync(databasePath)) {
-    throw new Error("Packaged application did not initialize the metadata database before timeout");
-  }
-
-  const database = new Database(databasePath, { readonly: true, strict: true });
-  const migration = database.query("SELECT version, name FROM schema_migrations").get();
-  database.close();
   if (JSON.stringify(migration) !== JSON.stringify({ version: 1, name: "metadata" })) {
-    throw new Error(`Unexpected packaged migration state: ${JSON.stringify(migration)}`);
+    const detail = lastReadError instanceof Error ? lastReadError.message : JSON.stringify(migration);
+    throw new Error(`Packaged application did not finish migration before timeout: ${detail}`);
   }
 
   process.stdout.write(`${JSON.stringify({ status: "pass", migration, launcher }, null, 2)}\n`);

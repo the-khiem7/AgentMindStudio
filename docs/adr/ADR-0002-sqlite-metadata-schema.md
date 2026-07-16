@@ -90,7 +90,7 @@ snapshotting | applying | verifying | recovering
 
 `planned` and `confirmed` are not automatically marked for recovery because no filesystem side effect has begun. Terminal states cannot transition. `recovery_attempts` increments when recovery starts, and interruption uses the stable code `PROCESS_INTERRUPTED`; raw exception or file content is not stored.
 
-The implemented state machine validates transitions before updating SQLite. Migration smoke tests verify forward/recovery transitions and restart classification. This is operation-journal infrastructure only: TG-006 and the read-only vertical-slice exit still block the production mutation engine.
+The implemented state machine validates transitions before updating SQLite. Migration smoke tests verify forward/recovery transitions and restart classification. This is operation-journal infrastructure only: TG-006 now verifies the threat/control contract, while the read-only vertical-slice exit and mapped capability tests still block production mutation behavior.
 
 ## Alternatives rejected
 
@@ -124,7 +124,7 @@ Rejected because a crash needs durable operation intent, state, target ordering,
 
 - The normalized schema is more verbose than a document store and requires explicit repository queries.
 - Schema checks prevent unsafe column design but cannot sanitize arbitrary strings by themselves; persistence APIs must continue to accept bounded, classified metadata only.
-- Snapshot file creation, retention, restore, atomic writes, and recovery execution are not implemented by this ADR and remain blocked by TG-006/Phase 2.
+- Snapshot file creation, retention, restore, atomic writes, and recovery execution are not implemented by this ADR; they remain Phase 2 work gated by the TG-006 capability-entry tests.
 - Profiles are not included in migration `0001`; adding them later requires a new migration if the post-MVP need is validated.
 
 ## Verification

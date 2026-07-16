@@ -59,6 +59,8 @@ TG-001 also produced local runtime evidence on 2026-07-15: ElectroBun 1.18.1 wit
 
 TG-005 produced implementation evidence on 2026-07-16: migration `0001` and its operation journal passed clean/idempotent migration, representative metadata close/reopen, failed-transaction rollback, secret/snapshot-content schema exclusion, shared-content deletion guards, state-transition, crash-classification, strict TypeScript, ElectroBun Windows dev build, and packaged migration initialization checks. See [ADR-0002](../../adr/ADR-0002-sqlite-metadata-schema.md) and the canonical completion record in the [technical-gate register](agentmindstudio.technical-gates.md). This evidence does not claim that client adapters, snapshot bytes, mutation execution, recovery execution, UI windows, installer execution, signing, or updates exist.
 
+TG-006 produced verified security evidence on 2026-07-16: the [threat model](agentmindstudio.threat-model.md) covers filesystem, reparse points, packages, processes, MCP tests, secrets, SQLite, snapshots, logs, exports, rollback, partial operations, and external changes. Current boundary tests pass for junction escape, bounded text reads, environment isolation, timeout, cancellation, and output limits. Future Critical/High-risk capabilities remain unavailable until their mapped entry tests pass; TG-006 does not claim those capabilities are implemented.
+
 ## 3. Verified external facts
 
 The facts below were checked against official product documentation on 2026-07-15. They are evidence for the initial adapter model, not permanent guarantees.

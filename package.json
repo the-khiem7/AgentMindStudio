@@ -9,6 +9,7 @@
     "start": "bun src/bun/index.ts",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
+    "verify:security": "bun test tests/security",
     "verify:packaged": "bun scripts/verify-packaged.ts"
   },
   "dependencies": {

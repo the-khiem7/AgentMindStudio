@@ -241,6 +241,6 @@ Implement the first read-only discovery/parse/normalize vertical slice against t
 
 TG-005 persistence is complete, and TG-007 UI exploration may proceed independently. No read evidence authorizes writes: instruction behavior remains read-only, and MCP/skill mutation still waits for Phase 2 safety gates and adapter-specific write-preservation tests.
 
-The parallel foundation lane has completed the ElectroBun scaffold and TG-005 schema. Client-specific read code may now begin against the passed TG-002/TG-003/TG-004 evidence; production UI still waits for TG-007, and mutation/snapshot execution waits for TG-006 plus the Phase 1 read-only exit.
+The parallel foundation lane has completed the ElectroBun scaffold and TG-005 schema, and TG-006 now verifies the security threat/control contract. Client-specific read code may begin against the passed TG-002/TG-003/TG-004 evidence; production UI still waits for TG-007, and mutation/snapshot execution still waits for the Phase 1 read-only exit plus the mapped capability security tests.
 
-The Phase 0 adapter proof may demonstrate discovery, normalization, comparison, and a side-effect-free dry-run. It must not implement real snapshot/write/rollback behavior; those capabilities begin only after TG-006 and the Phase 1 read-only exit permit entry into Phase 2.
+The Phase 0 adapter proof may demonstrate discovery, normalization, comparison, and a side-effect-free dry-run. It must not implement real snapshot/write/rollback behavior; TG-006 is passed, but those capabilities begin only after the Phase 1 read-only exit permits entry into Phase 2 and their mapped security tests pass.
